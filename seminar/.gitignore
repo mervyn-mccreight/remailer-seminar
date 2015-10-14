@@ -11,3 +11,5 @@
 *.lol
 
 *.synctex.gz
+*.bbl
+*.blg
