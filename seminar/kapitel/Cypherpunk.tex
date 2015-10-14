@@ -11,18 +11,24 @@ Die technische Umsetzung des Cypherpunk-Remailers wurde sehr stark von der Idee 
 Ein Mix-Netzwerk besteht aus einer beliebig großen Menge an Mixen M. Ein Mix in einem Mix-Netzwerk ist üblicherweise ein Server, der von beliebigen Personen betrieben werden kann. Ein Mix fungiert in einem Mix-Netzwerk als Nachrichtenübermittler. Er versendet empfangene Nachrichten in der Form weiter, sodass sie nicht mehr auf angenommene Nachrichten zurückzuführen sind. Durch diese Eigenschaft wird Senderanonymität gewährleistet.
 
 \section{Nachrichtenaustausch}
-Einige Konzepte des Mix-Netzwerkes wurden aufgegriffen um den Typ-I Remailer zu entwickeln. So werden Nachrichten über mehrere Typ-I Remailer verschickt. Möchte Alice eine Nachricht N an Bob übermitteln, sucht sie sich aus einer gegebenen Menge von Cypherpunk-Remailern eine endliche Teilmenge C = (C1, C2, ..., Cn) an Remailern aus, über die die Nachricht Schritt für Schritt an Bob übertragen wird. Für diese Teilmenge definiert Alice eine Routingreihenfolge. Jeder Remailer verfügt über je einen öffentlichen Schlüssel Ec und einen privaten Schlüssel Dc.
-Alice verschlüsselt nun ihre Nachricht zusammen mit den entsprechenden Routing-Informationen nacheinander mit den öffentlichen Schlüsseln Ec der selektierten Remailer, in rückwärtiger Reihenfolge der Routingordnung, beginnend mit dem letzten Remailer Cn.
+Einige Konzepte des Mix-Netzwerkes wurden aufgegriffen um den Typ-I Remailer zu entwickeln. Die wichtigsten Aspekte sind das Verschleiern des Nachrichtenweges durch das Senden über beliebige Knoten eines Netzwerks, sowie die schichtenweise Verschlüselung einer Nachricht. So werden Nachrichten über mehrere Typ-I Remailer verschickt. Möchte Alice eine Nachricht N an Bob übermitteln, sucht sie sich aus einer gegebenen Menge von Cypherpunk-Remailern eine endliche Teilmenge C = (C1, C2, ..., Cn) an Remailern aus, über die die Nachricht Schritt für Schritt an Bob übertragen wird. Für diese Teilmenge definiert Alice eine Routingreihenfolge. Jeder Remailer verfügt über je einen öffentlichen Schlüssel Ec und einen privaten Schlüssel Dc.
+Alice verschlüsselt nun ihre Nachricht zusammen mit den entsprechenden Routing-Informationen nacheinander mit den öffentlichen Schlüsseln Ec der selektierten Remailer, in rückwärtiger Reihenfolge der Routingordnung, beginnend mit dem letzten Remailer Cn (schichtenweise Verschlüsselung).
 
 (hier formelhafte oder bildhafte Erklärung der verzwiebelten Verschlüsselungsschichten. Lieber Formel als Bild).
 
 Anschließen initialisiert sie das Versenden der Nachricht, indem sie N' an C1 schickt.
 
-Eine Nachricht, die einen Typ-1 Remailer erreicht, enthält folgende Informationen:
+Eine Nachricht, die einen Typ-1 Remailer erreicht, enthält, nach Entschlüsselung mit Hilfe des eigenen privaten Schlüssels Dc, folgende Informationen:
 \begin{itemize}
-\item eine Routing-Information
-\item die aktuelle Form der Nachricht
+\item eine Routing-Information R
+\item eine Nachricht M
 \end{itemize}
+
+Der Routing-Information R entnimmt der Remailer, an wen die Nachricht M weitergeleitet werden soll. Dieses Verfahren wird fortgeführt, bis die Nachricht über den letzten Remailer Cn der Routingordnung Bob erreicht.
+
+(hier eine Grafik einfügen, die den  Senderverlauf der Nachrichten illustriert).
+
+Als Absender ist Bob nun lediglich die Adresse des Remailers Cn bekannt. Der echte Absender Alice bleibt verborgen.
 
 
 
