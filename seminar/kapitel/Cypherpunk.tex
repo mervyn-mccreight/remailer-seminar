@@ -1,5 +1,5 @@
 \chapter{Typ-I Remailer}
-Ca. 1994 beschloss eine Interessensgruppe mit dem Namen "Cypherpunk", die Entwicklung der Remailer voranzutreiben und entwickelten den Cypherpunk-Remailer. Dieser wird als Typ-I Remailer klassifiziert. Ziel der Entwicklung war es, die Unsicherheiten des Typ-0 Remailer zu beseitigen. 
+Ca. 1994 beschloss eine Interessensgruppe mit dem Namen "Cypherpunk", das Prinzip eines Remailers aufzugreifen und zu verbessern und entwickelten das Cypherpunk-Remailer Protokoll. Dieses wird als Typ-I Remailer klassifiziert. Ziel der Entwicklung war es, die Unsicherheiten des Typ-0 Remailer zu beseitigen. 
 Anders als bei dem Typ-0 Remailer, der ein pseudonymisierender Remailer ist, handelt es sich bei dem Typ-I Remailer um einen anonymisierenden Remailer. Das Ziel einer Anonymisierung ist das Verändern personenbezogener Daten in der Art, dass es unmöglich ist diese Daten einer Person zuzuordnen. \footnote {vgl. § 3 Abs. 6 BDSG}
 Die Anonymisierung bezieht sich in diesem Fall auf den Absender, sodass es das Ziel ist, jede Information über den Absender der Nachricht zu verstecken \footnote{vgl. S. 151 \cite{horster2013datenschutz}}. Folgerichtig bietet ein anonymisierender Remailer deutlich mehr Geheimnisschutz als ein pseudonymisierender Remailer. 
 
@@ -7,29 +7,36 @@ Die Anonymisierung bezieht sich in diesem Fall auf den Absender, sodass es das Z
 \section{Cypherpunk}
 
 \section{Mix Netzwerke}
-Die technische Umsetzung des Cypherpunk-Remailers wurde sehr stark von der Idee der Mix Netzwerke von David Chaum beeinflusst. Ein Mix-Netzwerk ermöglicht anonyme Kommunikation innerhalb eines Netzwerkes. Ziel ist es, dass der Empfänger gegenüber dem Sender verborgen bleibt.
-Ein Mix-Netzwerk besteht aus einer beliebig großen Menge an Mixen M. Ein Mix in einem Mix-Netzwerk ist üblicherweise ein Server, der von beliebigen Personen betrieben werden kann. Ein Mix fungiert in einem Mix-Netzwerk als Nachrichtenübermittler. Er versendet empfangene Nachrichten in der Form weiter, sodass sie nicht mehr auf angenommene Nachrichten zurückzuführen sind. Durch diese Eigenschaft wird Senderanonymität gewährleistet.
+Die technische Umsetzung des Cypherpunk-Remailers wurde sehr stark von der Idee der Mix Netzwerke von David Chaum beeinflusst. Ein Mix-Netzwerk ermöglicht anonyme Kommunikation innerhalb eines Netzwerkes. Ziel ist unter anderem, dass der Empfänger gegenüber dem Sender verborgen bleibt \footnote{In Mix Netzwerken bleibt zusätzlich noch der Empfänger dem Sender unbekannt. Diese Eigenschaft ist für die weitere Betrachtung dieser Ausarbeitung jedoch nicht wesentlich und wird dementsprechend nicht betrachtet.}.
+Ein Mix-Netzwerk besteht aus einer beliebig großen Menge an Mixen \(M\). Ein Mix in einem Mix-Netzwerk ist üblicherweise ein Server, der von beliebigen Personen betrieben werden kann. Ein Mix fungiert in einem Mix-Netzwerk als Nachrichtenübermittler. Er versendet empfangene Nachrichten in der Form weiter, sodass sie nicht mehr auf angenommene Nachrichten zurückzuführen sind. Durch diese Eigenschaft wird Senderanonymität gewährleistet.
 
 \section{Nachrichtenaustausch}
 Einige Konzepte des Mix-Netzwerkes wurden aufgegriffen um den Typ-I Remailer zu entwickeln. Die wichtigsten Aspekte sind das Verschleiern des Nachrichtenweges durch das Senden über beliebige Knoten eines Netzwerks, sowie die schichtenweise Verschlüsselung einer Nachricht \footnote{vgl. S. 84 \cite{sambleben2013informationstechnologie}}. Zur Verschlüsselung der Nachrichten wird das PGP-Verfahren verwendet. Es handelt sich hierbei um ein Public-Key Verfahren, sodass ein Schlüsselpaar bestehend aus privatem und öffentlichem Schlüssel benötigt wird.
-Nachrichten, die über das Typ-1 Remailer Protokoll versendet werden sollen, durchlaufen dementsprechend mehrere Remailer. Möchte Alice eine Nachricht N an Bob übermitteln, sucht sie sich aus einer gegebenen Menge von Cypherpunk-Remailern eine endliche Teilmenge C = (C1, C2, ..., Cn) an Remailern aus, über die die Nachricht Schritt für Schritt an Bob übertragen wird. Jeder Remailer verfügt für die PGP-Verschlüsselung über je einen öffentlichen Schlüssel Ec und einen privaten Schlüssel Dc. Für diese Teilmenge definiert Alice eine Routingreihenfolge.
-Alice verschlüsselt nun ihre Nachricht zusammen mit den entsprechenden Routing-Informationen nacheinander mit den öffentlichen Schlüsseln Ec der selektierten Remailer, in rückwärtiger Reihenfolge der Routingordnung, beginnend mit dem letzten Remailer Cn (schichtenweise Verschlüsselung).
+Nachrichten, die über das Typ-1 Remailer Protokoll versendet werden sollen, durchlaufen dementsprechend mehrere Remailer. Möchte Alice eine Nachricht \(N\) an Bob übermitteln, sucht sie sich aus einer gegebenen Menge von Cypherpunk-Remailern eine endliche Teilmenge \(C = (C_1, C_2, ..., C_n)\) an Remailern aus, über die die Nachricht Schritt für Schritt an Bob übertragen wird. Jeder Remailer verfügt für die PGP-Verschlüsselung über je einen öffentlichen Schlüssel \(E_C\) und einen privaten Schlüssel \(D_C\). Im Folgenden wird eine Nachricht \(N\), die mit einem öffentlichen Schlüssel \(E_x\) verschlüsselt wurde, als \(E_x(N)\) bezeichnet. Für die selektierte Teilmenge an Remailern definiert Alice eine Routingreihenfolge \(R = (R_1, R_2, ..., R_n, R_{Bob})\). Der letzte Eintrag \(R_{Bob}\) ist notwendig, da der letzte Remailer in der Kette die Nachricht letztendlich an Bob übermitteln muss.
+Alice verschlüsselt nun ihre Nachricht zusammen mit den entsprechenden Routing-Informationen nacheinander mit den öffentlichen Schlüsseln \(E_{C_x}\) der selektierten Remailer, in rückwärtiger Reihenfolge der Routingordnung, beginnend mit dem letzten Remailer \(C_n\) (schichtenweise Verschlüsselung):
 
-(hier formelhafte oder bildhafte Erklärung der verzwiebelten Verschlüsselungsschichten. Lieber Formel als Bild).
+\begin{equation}
+N' = (R_1, E_{C_1}(R_2, E_{C_2} (... (R_n,  E_{C_n}(R_{Bob}, E_{Bob}(N)))
+\end{equation}
 
-Anschließen initialisiert sie das Versenden der Nachricht, indem sie N' an C1 schickt.
+Anschließend initialisiert sie das Versenden der Nachricht, indem sie \(N'\) an \(C_1\) schickt.
 
-Eine Nachricht, die einen Typ-1 Remailer erreicht, enthält, nach Entschlüsselung mit Hilfe des eigenen privaten Schlüssels Dc, folgende Informationen:
+Eine Nachricht, die einen Typ-1 Remailer erreicht, enthält so, nach Entschlüsselung mit Hilfe des eigenen privaten Schlüssels \(D_C\), folgende Informationen:
 \begin{itemize}
 \item eine Routing-Information R
-\item eine Nachricht M
+\item eine (verschlüsselte) Nachricht \(E_x(...)\)
 \end{itemize}
 
-Der Routing-Information R entnimmt der Remailer, an wen die Nachricht M weitergeleitet werden soll. Dieses Verfahren wird fortgeführt, bis die Nachricht über den letzten Remailer Cn der Routingordnung Bob erreicht \footnote{vgl. S. 72-77 \cite{kubieziel2007anonym}}.
+Der Routing-Information R entnimmt der Remailer, an wen die Nachricht \(E_x(...)\) weitergeleitet werden soll. Vor dem Weiterleiten der Nachricht modifiziert der Remailer den Header der Nachricht in der Art, dass unkenntlich gemacht wird von wem er diese Nachricht empfangen hat. Essentiell ist, dass ein Remailer durch die Routing-Information R nur den die Adresse des direkten Nachfolgers erhält. Außer Alice ist niemandem der vollständige Pfad des Nachrichtenverlaufs durch das Remailer-Netzwerk bekannt. Auf diese Weise wird verhindert, dass der Betreiber eines solchen Remailers in der Lage ist die Anonymisierung des Absenders zu kompromittieren. Dieses Verfahren wird fortgeführt, bis die Nachricht über den letzten Remailer \(C_n\) der Routingordnung den eigentlichen Empfänger Bob erreicht \footnote{vgl. S. 72-77 \cite{kubieziel2007anonym}}.
 
 (hier eine Grafik einfügen, die den  Senderverlauf der Nachrichten illustriert).
 
-Als Absender ist Bob nun lediglich die Adresse des Remailers Cn bekannt. Der echte Absender Alice bleibt verborgen.
-Essentiell ist, dass ein Remailer durch die Routing-Information R nur den die Adresse des direkten Nachfolgers erhält. Außer Alice ist niemandem der vollständige Pfad des Nachrichtenverlaufs durch das Remailer-Netzwerk bekannt. Auf diese Weise wird verhindert, dass der Betreiber eines solchen Remailers in der Lage ist die Anonymisierung des Absenders zu kompromittieren.
+Als Absender ist Bob nun lediglich die Adresse des Remailers \(C_n\) bekannt. Der ursprüngliche Absender der Nachricht Alice bleibt verborgen. Auf diese Weise ist es Bob in diesem Protokoll allerdings nicht möglich, einem Absender einer Nachricht eine Antwort zu schicken.
 
 \section{Sicherheitsanalyse}
+Auf den ersten Blick vielversprechend wirkend, sind die Cypherpunk-Remailer bei einer genaueren Betrachtung jedoch nicht sicher\footnote{sicher insofern, dass die Anonymität eines Absenders gewährleistet wird.}. Geht man davon aus, dass es einem potentiellen Angreifer Eve möglich ist, den verursachten Traffic zu analysieren, ist es Eve möglich den Pfad einer Nachricht zu verfolgen (Traffic-Analyse). Dass dies möglich ist, hat im Wesentlichen zwei Gründe: 
+\begin{itemize}
+\item Ein Remailer ändert die Größe einer Nachricht nur minimal.
+\item Ein Remailer leitet die Nachricht nach Empfang sofort weiter.
+\end{itemize} 
+Das nur geringfügige Ändern der Nachrichtengröße (lediglich die Routing-Informationen entfallen), ermöglicht eine Zurordnung zwischen eingehenden und ausgehenden Nachrichten. Das sofortige Weiterleiten der Nachricht erleichtert diese Zuordnung ebenfalls. Diese Eigenschaften genügen Eve möglicherweise, den Verlauf einer Nachricht anhand des Sendezeitpunkts und der Größe zu verfolgen.
