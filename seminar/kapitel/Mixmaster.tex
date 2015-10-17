@@ -1,6 +1,22 @@
 \chapter{Typ-II Remailer}
 \section{Motivation}
+- Entstand nach Vorschlägen von Lance Cottrell - analysierte u.A. Schwächen von Cypherpunk-Remailern.
+- Schwächen von Cypherpunk Remailer analysiert und ausbessern, sicheres Protokoll für anonymes Remailen schaffen.
+- 1995
 
 \section{Funktionsweise}
+- benötigt anders als Cypherpunk-Protokoll einen Client.
+- basiert weiterhin auf Netzwerk von Remailern -> Nachrichten verschlüsseln mit asymmetrischem Verfahren (Public und Private Key)
+- Header Informationen manipulieren -> absenderbezogene Informationen entfernen.
+
+- aufteilen in mehrere gleichgroße Chunks. Zu kleine Blöcke werden mit Dummy-Daten aufgefüllt. <- verhindert Verfolgung anhand der Größe
+- Chunks gehen (möglicherweise) über verschiedene Remailer-Ketten. Nur der letzte Remailer muss identisch sein. Nur er kann Nachricht zusammensetzen und an Empfänger weiterleiten.
+- Nachrichtenpool als Nachrichtenspeicher zum Sammeln.
+- Nachrichten aus Pool in zufälliger Reihenfolge wieder versenden. <- Verhindert Verfolgung anhand von Zeitpunkt
+- Wenn Pool nicht rechtzeitig voll, füllt Remailer Pool mit Dummy-Nachrichten und schickt sie auch raus.
+- Integritätscheck von Nachrichten über Signatur.
 
 \section{Sicherheitsanalyse}
+- gilt als sicher
+- nur theoretischer Angriff denkbar
+Ein Angreifer hält die Nachricht, deren Empfänger er herausfinden möchte, zurück. Danach sendet er eigene Nachrichten an den Mixmaster. Dies macht er solange bis der Nachrichtenpool des Mixmasters mit seinen Nachrichten gefüllt ist. Danach schickt er die zurückgehaltene Nachricht los. Alle Nachrichten, die durch den Mixmaster gehen, werden entweder an den Angreifer oder aber an eine dritte Adresse gesendet. Die dritte Adresse ist die des Empfängers der zurückgehaltenen Nachricht.

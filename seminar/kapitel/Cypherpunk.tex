@@ -40,10 +40,14 @@ Der Routing-Information R entnimmt der Remailer, an wen die Nachricht \(E_x(...)
 
 Als Absender ist Bob nun lediglich die Adresse des Remailers \(C_n\) bekannt. Der ursprüngliche Absender der Nachricht Alice bleibt verborgen. Auf diese Weise ist es Bob in diesem Protokoll allerdings nicht möglich, einem Absender einer Nachricht eine Antwort zu schicken.
 
-\section{Sicherheitsanalyse}
+\section{Analyse}
+\subsection{Sicherheit}
 Auf den ersten Blick vielversprechend wirkend, sind die Cypherpunk-Remailer bei einer genaueren Betrachtung jedoch nicht sicher\footnote{sicher insofern, dass die Anonymität eines Absenders gewährleistet wird.}. Geht man davon aus, dass es einem potentiellen Angreifer Eve möglich ist, den verursachten Traffic zu analysieren, ist es Eve möglich den Pfad einer Nachricht zu verfolgen (Traffic-Analyse). Dass dies möglich ist, hat im Wesentlichen zwei Gründe: 
 \begin{itemize}
 \item Ein Remailer ändert die Größe einer Nachricht nur minimal.
 \item Ein Remailer leitet die Nachricht nach Empfang sofort weiter.
 \end{itemize} 
 Das nur geringfügige Ändern der Nachrichtengröße (lediglich die Routing-Informationen entfallen), ermöglicht eine Zurordnung zwischen eingehenden und ausgehenden Nachrichten. Das sofortige Weiterleiten der Nachricht erleichtert diese Zuordnung ebenfalls. Diese Eigenschaften genügen Eve möglicherweise, den Verlauf einer Nachricht anhand des Sendezeitpunkts und der Größe zu verfolgen.
+
+\subsection{Zuverlässigkeit}
+- Ist ein gewählter Remailer defekt, oder ist nicht kompatibel (leicht anderes Protokoll), kommt Nachricht nicht an. Der Sender und der Empfänger bekommen davon nichts mit, weil beide dem Remailer unbekannt sind.
