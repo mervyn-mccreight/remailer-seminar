@@ -12,10 +12,14 @@ Bisher sind alle Schritte identisch dem Cypherpunk-Remailer Protokoll. Um die Sc
 \subsection{Chunks}
 Im Mixmaster-Remailer Protokoll werden Nachrichten in gleichgroße Blöcke \footnote{auch "chunks"} aufgeteilt (beispielsweise 20 kB groß). Ist es nicht möglich eine Nachricht in Blöcke von äquivalenter Größe aufzuteilen, wird der zu kleine Block mit zufällig generierten Daten aufgefüllt. Anstelle der vollständigen Nachricht werden nun die verschiedenen gleichgroßen Blöcke einer Nachricht über das Remailer-Netzwerk verteilt. Zusammengehörende Blöcke müssen hierbei nicht zwangsweise den selben Pfad durch das Netzwerk nehmen. Es ist sogar vorteilhaft, wenn die Blöcke möglichst über unterschiedliche Remailer in dem Netzwerk verteilt werden. Wichtig ist jedoch, dass der letzte Remailer, der die Nachricht schlussendlich an den ursprünglichen Empfänger überträgt, für alle Blöcke einer Nachricht identisch ist. Nur dieser letzte Remailer ist dazu in der Lage, die vollständige Nachricht wiederherzustellen, sofern er alle der Nachricht zugehörigen Blöcke empfangen hat. Anschließend leitet er die Nachricht an Empfänger weiter. Dieses gesamte Verfahren sorgt dafür, dass eine Nachricht nicht mehr anhand ihrer Größe durch das Remailer-Netzwerk verfolgt werden kann. Alle Nachrichten, die innerhalb des Remailer-Netzwerks übertragen werden, sind von gleicher Größe und für einen potentiellen Angreifer Eve identisch. Eine Zuordnung ist auf diese Art und Weise nicht mehr möglich.
 
+\subsection{Pool}
 - Nachrichtenpool als Nachrichtenspeicher zum Sammeln.
 - Nachrichten aus Pool in zufälliger Reihenfolge wieder versenden. <- Verhindert Verfolgung anhand von Zeitpunkt
 - Wenn Pool nicht rechtzeitig voll, füllt Remailer Pool mit Dummy-Nachrichten und schickt sie auch raus.
+
+\subsection{Signatur}
 - Integritätscheck von Nachrichten über Signatur. <- Verhindert das Einführen manipulierter Nachrichten.
+- Signatur enthält auch "Seriennummer" für Nachricht <- Verhindert mehrfach behandeln derselben Nachricht. Nachricht wird dann empfangen, aber ignoriert, also nicht in Pool gespeichert und weggeworfen.
 
 \section{Sicherheitsanalyse}
 - gilt als sicher
