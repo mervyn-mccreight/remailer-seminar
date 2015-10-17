@@ -1,8 +1,6 @@
 \chapter{Typ-II Remailer}
 \section{Motivation}
-- Entstand nach Vorschlägen von Lance Cottrell - analysierte u.A. Schwächen von Cypherpunk-Remailern.
-- Schwächen von Cypherpunk Remailer analysiert und ausbessern, sicheres Protokoll für anonymes Remailen schaffen.
-- 1995
+Das Mixmaster-Remailer Protokoll ist seit 1995 verfügbar. Die Motiviation und gleichzeitig das Ziel der Entwicklung der Typ-II Remailer war, die Schwächen der Typ-I-Remailer Generation zu beseitigen. Die wesentlichen Konzepte zur Umsetzung und Verbesserung wurden von Lance Cottrell in seiner Ausarbeitung "{}Mixmaster and remailer attacks"{} erarbeitet. In dieser legt er die Schwächen der Cypherpunk-Remailer offen und analysiert, wodurch diese entstehen, und stellt konkrete Vorschläge dar, wie die vorhandenen Sicherheitslücken möglicherweise zu umgehen sind. So erörtert er unter Anderem, dass und aus welchem Grund Cypherpunk-Remailer nicht zuverlässig verhindern, dass eine Verbindung zwischen eingehenden und ausgehenden Nachrichten an einem Knoten im Remailer-Netzwerk hergestellt werden kann\footnote{vgl. S. 276 \cite{oram2001peer}}. Damit entwarf und implementierte Lance Cottrell das erste Design des Mixmaster Protokolls \footnote{vgl. \cite{mixmastermanpage} - zuletzt aufgerufen am 17.10.2015}.
 
 \section{Funktionsweise}
 - benötigt anders als Cypherpunk-Protokoll einen Client.
@@ -14,7 +12,7 @@
 - Nachrichtenpool als Nachrichtenspeicher zum Sammeln.
 - Nachrichten aus Pool in zufälliger Reihenfolge wieder versenden. <- Verhindert Verfolgung anhand von Zeitpunkt
 - Wenn Pool nicht rechtzeitig voll, füllt Remailer Pool mit Dummy-Nachrichten und schickt sie auch raus.
-- Integritätscheck von Nachrichten über Signatur.
+- Integritätscheck von Nachrichten über Signatur. <- Verhindert das Einführen manipulierter Nachrichten.
 
 \section{Sicherheitsanalyse}
 - gilt als sicher
