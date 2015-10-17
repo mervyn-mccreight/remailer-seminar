@@ -4,11 +4,14 @@ Das Mixmaster-Remailer Protokoll ist seit 1995 verfügbar. Die Motiviation und g
 
 \section{Funktionsweise}
 - benötigt anders als Cypherpunk-Protokoll einen Client.
-- basiert weiterhin auf Netzwerk von Remailern -> Nachrichten verschlüsseln mit asymmetrischem Verfahren (Public und Private Key)
-- Header Informationen manipulieren -> absenderbezogene Informationen entfernen.
 
-- aufteilen in mehrere gleichgroße Chunks. Zu kleine Blöcke werden mit Dummy-Daten aufgefüllt. <- verhindert Verfolgung anhand der Größe
-- Chunks gehen (möglicherweise) über verschiedene Remailer-Ketten. Nur der letzte Remailer muss identisch sein. Nur er kann Nachricht zusammensetzen und an Empfänger weiterleiten.
+Das Mixmaster-Remailer Protokoll basiert, analog zum Cypherpunk-Remailer Protokoll, auf einem Netzwerk von Remailern, ähnlich einem Chaum'schen Mix-Netzwerk. Das Verfahren, nach dem eine Nachricht die verschiedenen Knoten des Netzwerks traversiert, bleibt größtenteils identisch. Auch hier wird ein asymmetrisches Verschlüsselungsverfahren verwendet, auf Basis dessen eine Nachricht entsprechend der öffentlichen Schlüssel der Remailer schichtenweise verschlüsselt wird. Hierbei muss der Pfad einer Nachricht im Netzwerk beim schichtenweisen Verschlüsseln der Nachricht bereits bekannt sein. Weiterhin manipuliert ein Remailer nach dem Empfangen und Entschlüsseln einer Nachricht den Nachrichtenheader, um den Absender der Nachricht unkenntlich zu machen. Auf diese Weise wird jede Art von absenderbezogenen Informationen entfernt und die Nachricht anonymisiert. 
+
+Bisher sind alle Schritte identisch dem Cypherpunk-Remailer Protokoll. Um die Schwächen der Typ-I Remailer zu entfernen, benötigte es der Einführung zusätzlicher Sicherheitsmaßnahmen, die im Folgenden erläutert werden.
+
+\subsection{Chunks}
+Im Mixmaster-Remailer Protokoll werden Nachrichten in gleichgroße Blöcke \footnote{auch "chunks"} aufgeteilt (beispielsweise 20 kB groß). Ist es nicht möglich eine Nachricht in Blöcke von äquivalenter Größe aufzuteilen, wird der zu kleine Block mit zufällig generierten Daten aufgefüllt. Anstelle der vollständigen Nachricht werden nun die verschiedenen gleichgroßen Blöcke einer Nachricht über das Remailer-Netzwerk verteilt. Zusammengehörende Blöcke müssen hierbei nicht zwangsweise den selben Pfad durch das Netzwerk nehmen. Es ist sogar vorteilhaft, wenn die Blöcke möglichst über unterschiedliche Remailer in dem Netzwerk verteilt werden. Wichtig ist jedoch, dass der letzte Remailer, der die Nachricht schlussendlich an den ursprünglichen Empfänger überträgt, für alle Blöcke einer Nachricht identisch ist. Nur dieser letzte Remailer ist dazu in der Lage, die vollständige Nachricht wiederherzustellen, sofern er alle der Nachricht zugehörigen Blöcke empfangen hat. Anschließend leitet er die Nachricht an Empfänger weiter. Dieses gesamte Verfahren sorgt dafür, dass eine Nachricht nicht mehr anhand ihrer Größe durch das Remailer-Netzwerk verfolgt werden kann. Alle Nachrichten, die innerhalb des Remailer-Netzwerks übertragen werden, sind von gleicher Größe und für einen potentiellen Angreifer Eve identisch. Eine Zuordnung ist auf diese Art und Weise nicht mehr möglich.
+
 - Nachrichtenpool als Nachrichtenspeicher zum Sammeln.
 - Nachrichten aus Pool in zufälliger Reihenfolge wieder versenden. <- Verhindert Verfolgung anhand von Zeitpunkt
 - Wenn Pool nicht rechtzeitig voll, füllt Remailer Pool mit Dummy-Nachrichten und schickt sie auch raus.
