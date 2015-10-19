@@ -1,17 +1,61 @@
 \chapter{Typ-III Remailer}
+- entscheidender Vorteil: Antworten auf anonyme Nachrichten (in keinem der anderen ANONYMEN Remailer Protokolle möglich (bei Typ-0 ging es, da Pseudonym).
+- hat das Typ-II Remailer Protokoll als Basis (baut darauf auf)
+- Weiterentwicklung dient nicht primär der Sicherheit (Mixmaster gilt schon als sehr sicher), sondern der generell der Funktionalität
+- wichtige Neuerungen: 1) Antworten auf anonyme Nachrichten, 2) Verschlüsselte Kommunikation zw. den Remailern (TLS statt SMTP, verhindert Abfangen von Nachrichten) 3) Einführung von zentralem Verzeichnisserver
 
-\section{Motivation}
+\section{Funktionsweise}
+\subsection{SURBs}
+- Bob kann eigentlich nicht Antworten, da er Identität von Alice nicht kennt.
+- Dafür erstellt Alice SURB (single use reply block) und hängt ihn an Nachricht an (ist verschlüsselt).
+- enthält verschlüsselte E-Mail Adresse von Alice und Pfad durch das Remailer-Netzwerk zu Alice.
+- Empfänger kann SURB verwenden, um auf anonyme Nachricht zu antworten
+-- Nachricht an SURB anhängen und an ersten Remailer des Remailerpfades senden.
+- Verwendung nur ein mal möglich
 
-\section{SURBs}
+\subsection{Nachrichten}
+\subsubsection{Typisierung}
+- Hinzunahme von Antworten benötigt Typisierung von Nachrichten.
+- 1) normale Nachricht 2) direkte Antwort über SURB 3) anonyme Antwort (Bob bleibt auch gegenüber Alice anonym).
 
-\section{Nachrichten}
-\subsection{Typisierung}
-\subsection{Ununterscheidbarkeit}
+\subsubsection{Ununterscheidbarkeit}
+- Nachrichten müssen nach außen hin Ununterscheidbar sein, damit Eve nicht über die Unterscheidung auf Rückschlüsse bzgl. des Nachrichtenverkehrs kommen kann (Nachrichtenflusstransparenz aus Mixmaster muss erhalten bleiben).
 
-\section{Verzeichnisserver}
+\subsubsection{Aufbau}
+- Größe 32kB
+- besteht aus Header und Rest (Rest enthält eigentlichen Inhalt).
+- Pfad im Netzwerk wird in zwei Teile aufgeteilt -> also wird auch Header in zwei Teile aufgeteilt (primär erster Teil und sekundär zweiter Teil).
+- Pfad darf maximal 32 Remailer beinhalten.
+- Für jeden Remailer im Pfad enthält sowohl primärer, als auch Sekundärer Header einen (pro Remailer) Sub-Header, der Prüfsumme für den Rest des Headers enthält (um Integrität des Headers nachzuweisen).
+- SubHeader beinhaltet noch: Master Secret für Erstellung von symm. Schlüssel für Verschlüsselung von Nachricht zum Übertragen (TLS) und Adresse des nächsten Remailers
 
-\section{evtl. Nachrichtenaustausch}
+- normale Nachrichten: primärer und sekundärer Header vom Absender befüllt (logisch)
+- direkte Antwort: sekundärer Header mit beliebigen Daten gefüllt (?)
+- anonyme Antwort: im sekundären Header ist SURB des Antworters (ursprünglicher Empfänger Bob).
+
+\subsection{Verzeichnisserver}
+- Verzeichnis auf mehrere Server verteilt
+- alle VZ-Server werden ständig synchronisiert, sind also zueinander redundant
+- VZ-Server verifizieren sich gegenseitig, um Einführen von manipulierten VZ-Servern zu vermeiden.
+-- soll ausfallsicherheit gewährleisten
+- informiert Benutzer über Status und Schlüssel der versch. Remailer im Netzwerk
+- jeder Remailer im Netzwerk registriert sich anfangs beim Verzeichnisserver
+- Remailer aktualisiert VZ-Server laufend über Zustand und Schlüssel
+
+\section{Ablauf}
+- Alice besorgt sich vom VZ-Server alle benötigten Informationen (Status und Schlüssel), um Pfad auszuwählen.
+- Versenden und Verschlüsseln äquivalent zu Mixmaster.
+- Vor Weiterleitung überprüft Remailer Integrität der Nachricht (wie Mixmaster)
+- Dann baut Remailer verschlüsselte Verbindung (TLS) zum nächsten Remailer auf.
+-- sym. Schlüssel dafür findet er in Header (Master Secret)
+- Dann Weiterleitung
+
+- Verhalten beim Übergang zw. ersten Teil und zweiten Teil des Pfades (swap-Operation? genauer Herausfinden...)
+
 
 \section{Sicherheitsanalyse}
+- theoretisch sicherster Remailer
+- aber praktisch nicht nachzuweisen
+- da nie in den praktischen Einsatz gekommen (blieb im Beta-Stadium, wurde nie fertig entwickelt).
 
 
