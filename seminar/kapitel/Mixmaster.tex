@@ -35,6 +35,7 @@ Auf diese Weise ist es einem Angreifer Eve nicht mehr möglich eine Nachricht an
 
 
 \subsection{Signatur}
+Weiterhin wurde bei dem Mixmaster-Remailer das Überprüfen der Integrität einer im Remailer-Netzwerk verschickten Nachricht als zusätzlicher Sicherheitsmechanismus eingeführt. Hierfür wird in einem verschlüsselten Header der Nachricht eine Signatur übertragen. Durch das Überprüfen der Signatur ist es einem empfangenen Remailer möglich zu überprüfen ob eine Nachricht entweder abgefangen und manipuliert, oder vollständig fremdeingeführt worden ist. Auf diese Weise ist es einem theoretischen Angreifer Eve nicht mehr möglich, manipulierte Nachrichten in das Remailernetzwerk einzuspielen um das Verhalten auf diese Nachrichten zu analysieren.
 - Integritätscheck von Nachrichten über Signatur. <- Verhindert das Einführen manipulierter Nachrichten.
 - Signatur enthält auch "Seriennummer" für Nachricht <- Verhindert mehrfach behandeln derselben Nachricht. Nachricht wird dann empfangen, aber ignoriert, also nicht in Pool gespeichert und weggeworfen.
 
