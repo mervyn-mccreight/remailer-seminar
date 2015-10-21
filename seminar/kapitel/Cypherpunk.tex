@@ -12,7 +12,7 @@ Ein Mix-Netzwerk besteht aus einer beliebig großen Menge an Mixen \(M\). Ein Mi
 
 \section{Nachrichtenaustausch}
 Einige Konzepte des Mix-Netzwerkes wurden aufgegriffen um den Typ-I Remailer zu entwickeln. Die wichtigsten Aspekte sind das Verschleiern des Nachrichtenweges durch das Senden über beliebige Knoten eines Netzwerks, sowie die schichtenweise Verschlüsselung einer Nachricht \footnote{vgl. S. 84 \cite{sambleben2013informationstechnologie}}. Zur Verschlüsselung der Nachrichten wird das PGP-Verfahren verwendet. Es handelt sich hierbei um ein Public-Key Verfahren, sodass ein Schlüsselpaar bestehend aus privatem und öffentlichem Schlüssel benötigt wird.
-Nachrichten, die über das Typ-1 Remailer Protokoll versendet werden sollen, durchlaufen dementsprechend mehrere Remailer. Möchte Alice eine Nachricht \(N\) an Bob übermitteln, sucht sie sich aus einer gegebenen Menge von Cypherpunk-Remailern eine endliche Teilmenge \(C = (C_1, C_2, ..., C_n)\) an Remailern aus, über die die Nachricht Schritt für Schritt an Bob übertragen wird. Jeder Remailer verfügt für die PGP-Verschlüsselung über je einen öffentlichen Schlüssel \(E_C\) und einen privaten Schlüssel \(D_C\). Im Folgenden wird eine Nachricht \(N\), die mit einem öffentlichen Schlüssel \(E_x\) verschlüsselt wurde, als \(E_x(N)\) bezeichnet. Für die selektierte Teilmenge an Remailern definiert Alice eine Routingreihenfolge \(A = (A_1, A_2, ..., A_n, A_{Bob})\). Der letzte Eintrag \(A_{Bob}\) ist notwendig, da der letzte Remailer in der Kette die Nachricht letztendlich an Bob übermitteln muss.
+Nachrichten, die über das Typ-I Remailer Protokoll versendet werden sollen, durchlaufen dementsprechend mehrere Remailer. Möchte Alice eine Nachricht \(N\) an Bob übermitteln, sucht sie sich aus einer gegebenen Menge von Cypherpunk-Remailern eine endliche Teilmenge \(C = (C_1, C_2, ..., C_n)\) an Remailern aus, über die die Nachricht Schritt für Schritt an Bob übertragen wird. Jeder Remailer verfügt für die PGP-Verschlüsselung über je einen öffentlichen Schlüssel \(E_C\) und einen privaten Schlüssel \(D_C\). Im Folgenden wird eine Nachricht \(N\), die mit einem öffentlichen Schlüssel \(E_x\) verschlüsselt wurde, als \(E_x(N)\) bezeichnet. Für die selektierte Teilmenge an Remailern definiert Alice eine Routingreihenfolge \(A = (A_1, A_2, ..., A_n, A_{Bob})\). Der letzte Eintrag \(A_{Bob}\) ist notwendig, da der letzte Remailer in der Kette die Nachricht letztendlich an Bob übermitteln muss.
 Alice verschlüsselt nun ihre Nachricht zusammen mit den entsprechenden Routing-Informationen nacheinander mit den öffentlichen Schlüsseln \(E_{C_x}\) der selektierten Remailer, in rückwärtiger Reihenfolge der Routingordnung, beginnend mit dem letzten Remailer \(C_n\) (schichtenweise Verschlüsselung):
 
 \begin{equation}
@@ -21,7 +21,7 @@ N' = (A_1, E_{C_1}(A_2, E_{C_2} (... (A_n,  E_{C_n}(A_{Bob}, E_{Bob}(N)))
 
 Anschließend initialisiert sie das Versenden der Nachricht, indem sie \(N'\) an \(C_1\) schickt.
 
-Eine Nachricht, die einen Typ-1 Remailer erreicht, enthält so, nach Entschlüsselung mit Hilfe des eigenen privaten Schlüssels \(D_C\), folgende Informationen:
+Eine Nachricht, die einen Typ-I Remailer erreicht, enthält so, nach Entschlüsselung mit Hilfe des eigenen privaten Schlüssels \(D_C\), folgende Informationen:
 \begin{itemize}
 \item eine Adresse \(A_i\)
 \item eine (verschlüsselte) Nachricht \(E_j(...)\)
