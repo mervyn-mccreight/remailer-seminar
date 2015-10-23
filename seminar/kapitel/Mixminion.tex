@@ -46,9 +46,7 @@ Bereits in den vorherigen Kapiteln wurde darauf hingewiesen, dass es für die Ge
 
 Dieser Zustand muss auch nach der Einführung verschiedener Nachrichtentypen erhalten bleiben.  Die Nachrichtentypen müssen daher nach außen hin ununterscheidbar bleiben. Das ist wichtig, damit es Eve nicht möglich ist, über die Unterscheidung der Nachrichtentypen Rückschlüsse bezüglich des Nachrichtenverkehrs zu ziehen. Diese Transparenz wird dadurch gewährleistet, dass alle drei Nachrichtenarten strukturell identisch aufgebaut sind. Sie verfügen über gleichgroße Header- und Bodygrößen\footnote{Body wird häufig auch Payload genannt.}.
 
-\subsubsection{Technische Struktur einer Nachricht}
-- hier bietet sich Bild an, um Aufbau aller drei Nachrichtenarten miteinander zu vergleichen (Unterschied liegt im Aufbau des Headers bzw. dem Inhalt des prim. und sek. Headers).
-
+\subsubsection{Strukturen der unterschiedlichen Typen}
 Die Nachrichten die in einem Mixminion-Remailer Netzwerk verschickt werden, sind grundsätzlich ingesamt 32kB groß. Durch diese Gleichförmigkeit der Größe liefert eine Analyse des Traffic keinen Aufschluss darüber, welche Arten von Nachrichten gerade in dem Remailer-Netzwerk ausgetauscht werden.
 
 Jede Nachricht im Mixminion-Protokoll besteht dabei grundlegend aus den Komponenten 
@@ -63,14 +61,18 @@ Jede Nachricht im Mixminion-Protokoll besteht dabei grundlegend aus den Komponen
 
 Signifikant ist, dass der Header sich in zwei Teile aufteilt -- dem primären und dem sekundären Header. Dabei haben sowohl der primäre als auch der sekundäre Header jeweils eine Größe von 2kB und der Body eine Größe von 28kB. Der Body einer Nachricht enthält, unabhängig vom Typ der Nachricht, in jedem Fall die eigentlich zu übertragende Information; im letzten Schritt also die Nachricht des Senders an den Empfänger. Die Typisierung einer Nachricht wird durch den Inhalt des primären und sekundären Headers unterschieden.
 
-- normale Nachricht:
--- prim und sekundärer Header: Pfad (1 - 16 Subheader) -> also maximal 32 Subheader. Jeder Subheader entspricht einem Knoten im Pfad.
--- primärer erster Teil, sekundärer zweiter Teil des Gesamtpfads Pfad.
--- Pfad darf maximal 32 Remailer beinhalten.
--- Subheader beinhaltet: Master-Secret für Erstellung von symm. Schlüssel für Aufbau verschl. Verbindung (TLS), Adresse des nächsten Remailers, Prüfsumme für Rest des Headers (Integrität)
+(hier Bild mit Struktur der drei Nachrichtentypen, wichtig ist der Inhalt der Header, einfach in Textform rein?)
 
--- Für jeden Remailer im Pfad enthält sowohl primärer, als auch Sekundärer Header einen (pro Remailer) Sub-Header, der Prüfsumme für den Rest des Headers enthält (um Integrität des Headers nachzuweisen).
-- SubHeader beinhaltet noch: Master Secret für Erstellung von symm. Schlüssel für Verschlüsselung von Nachricht zum Übertragen (TLS) und Adresse des nächsten Remailers
+Die obige Abbildung beschreibt den Inhalt des primären und des sekundären Header in den verschiedenen Nachrichtenfällen.
+Man sieht, dass sowohl der primäre als auch der sekundäre Header im Falle einer normalen Nachricht, als auch der primäre Header im Falle einer anonymen Antwort, Pfadinformationen durch das Netzwerk beinhalten.
+Ein solcher Pfad ist selbst wieder in Subheader aufgeteilt. Jeder Subheader entspricht hierbei einem Datum für einen Remailer des Pfades. Ein solcher Subheader beinhaltet im wesentlichen drei Daten
+\begin{itemize}
+\item ein Master-Secret für die Erstellung eines symmetrischen Schlüssels für den Aufbau einer verschlüsselten Verbindung zum nächsten Remailer im Pfad
+\item eine Adresse des nächsten Remailers im Pfad
+\item eine Prüfsumme zum Überprüfen der Integrität des Rests des Headers
+\end{itemize}
+Der Pfad des primären und der Pfad des sekundären Headers ergeben, im Falle einer normalen Nachricht, zusammen den Gesamtpfad der Nachricht durch das Remailer-Netzwerk zum Empfänger. Dabei entspricht der Pfad im primären Header dem ersten Teil, der Teil im sekundären Header dem zweiten Teil des Pfades.
+Sowohl der primäre als auch der sekundäre Header können sich maximal aus 16 dieser Subheader zusammensetzen. Demzufolge ist die maximale Länge der Route einer normalen Nachricht im Mixminion-Protokoll 32.
 
 - normale Nachrichten: primärer und sekundärer Header vom Absender befüllt (logisch)
 - direkte Antwort: sekundärer Header mit beliebigen Daten gefüllt (?)
