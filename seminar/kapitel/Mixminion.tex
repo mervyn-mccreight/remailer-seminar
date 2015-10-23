@@ -46,14 +46,30 @@ Bereits in den vorherigen Kapiteln wurde darauf hingewiesen, dass es für die Ge
 
 Dieser Zustand muss auch nach der Einführung verschiedener Nachrichtentypen erhalten bleiben.  Die Nachrichtentypen müssen daher nach außen hin ununterscheidbar bleiben. Das ist wichtig, damit es Eve nicht möglich ist, über die Unterscheidung der Nachrichtentypen Rückschlüsse bezüglich des Nachrichtenverkehrs zu ziehen. Diese Transparenz wird dadurch gewährleistet, dass alle drei Nachrichtenarten strukturell identisch aufgebaut sind. Sie verfügen über gleichgroße Header- und Bodygrößen\footnote{Body wird häufig auch Payload genannt.}.
 
-\subsubsection{Aufbau}
+\subsubsection{Technische Struktur einer Nachricht}
 - hier bietet sich Bild an, um Aufbau aller drei Nachrichtenarten miteinander zu vergleichen (Unterschied liegt im Aufbau des Headers bzw. dem Inhalt des prim. und sek. Headers).
 
-- Größe 32kB
-- besteht aus Header und Rest (Rest enthält eigentlichen Inhalt).
-- Pfad im Netzwerk wird in zwei Teile aufgeteilt -> also wird auch Header in zwei Teile aufgeteilt (primär erster Teil und sekundär zweiter Teil).
-- Pfad darf maximal 32 Remailer beinhalten.
-- Für jeden Remailer im Pfad enthält sowohl primärer, als auch Sekundärer Header einen (pro Remailer) Sub-Header, der Prüfsumme für den Rest des Headers enthält (um Integrität des Headers nachzuweisen).
+Die Nachrichten die in einem Mixminion-Remailer Netzwerk verschickt werden, sind grundsätzlich ingesamt 32kB groß. Durch diese Gleichförmigkeit der Größe liefert eine Analyse des Traffic keinen Aufschluss darüber, welche Arten von Nachrichten gerade in dem Remailer-Netzwerk ausgetauscht werden.
+
+Jede Nachricht im Mixminion-Protokoll besteht dabei grundlegend aus den Komponenten 
+\begin{itemize}
+\item Header
+	\begin{itemize}
+	\item primärer Header
+	\item sekundärer Header
+	\end{itemize}
+\item Body (Payload)
+\end{itemize}
+
+Signifikant ist, dass der Header sich in zwei Teile aufteilt -- dem primären und dem sekundären Header. Dabei haben sowohl der primäre als auch der sekundäre Header jeweils eine Größe von 2kB und der Body eine Größe von 28kB. Der Body einer Nachricht enthält, unabhängig vom Typ der Nachricht, in jedem Fall die eigentlich zu übertragende Information; im letzten Schritt also die Nachricht des Senders an den Empfänger. Die Typisierung einer Nachricht wird durch den Inhalt des primären und sekundären Headers unterschieden.
+
+- normale Nachricht:
+-- prim und sekundärer Header: Pfad (1 - 16 Subheader) -> also maximal 32 Subheader. Jeder Subheader entspricht einem Knoten im Pfad.
+-- primärer erster Teil, sekundärer zweiter Teil des Gesamtpfads Pfad.
+-- Pfad darf maximal 32 Remailer beinhalten.
+-- Subheader beinhaltet: Master-Secret für Erstellung von symm. Schlüssel für Aufbau verschl. Verbindung (TLS), Adresse des nächsten Remailers, Prüfsumme für Rest des Headers (Integrität)
+
+-- Für jeden Remailer im Pfad enthält sowohl primärer, als auch Sekundärer Header einen (pro Remailer) Sub-Header, der Prüfsumme für den Rest des Headers enthält (um Integrität des Headers nachzuweisen).
 - SubHeader beinhaltet noch: Master Secret für Erstellung von symm. Schlüssel für Verschlüsselung von Nachricht zum Übertragen (TLS) und Adresse des nächsten Remailers
 
 - normale Nachrichten: primärer und sekundärer Header vom Absender befüllt (logisch)
