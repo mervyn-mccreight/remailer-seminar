@@ -27,11 +27,11 @@ Ein SURB enthält zwei wichtige Informationen:
 
 Wichtig ist, dass der SURB selbst für den Empfänger nicht entschlüsselbar ist. Bob ist weiterhin nicht in der Lage die Identität von Alice zu entschlüsseln. Dazu ist lediglich ein Mixminion-Remailer in der Lage. Bob kann jedoch den SURB dazu verwenden um Alice auf ihre anonyme Nachricht zu antworten. Hierfür hängt Bob seine Antwortnachricht an den SURB an und verschickt dieses Konstrukt an den ersten Remailer des im SURB vorhandenen Remailerpfades. Der letzte Remailer dieses Pfades ist nun dazu in der Lage die Adresse von Alice zu entschlüsseln um die Antwort letztendlich an Alice weiterzuleiten.
 
-Bob kann dabei pro empfangenen SURB nur eine Nachricht an Alice schicken. Das liegt daran, dass ein SURB nur einfach verwendbar ist\footnote{daher SINGLE-USE-Reply-Block}. Möchte Bob Alice eine weitere Nachricht schicken, muss er auf eine weitere Nachricht von Alice, die einen SURB enthält, warten, um diesen SURB für eine erneute Antwort zu verwenden.
+Bob kann dabei pro empfangenen SURB nur eine Nachricht an Alice schicken. Das liegt daran, dass ein SURB nur einfach verwendbar ist\footnote{daher SINGLE-USE-Reply-Block}. Möchte Bob Alice eine weitere Nachricht schicken, muss er auf eine weitere Nachricht von Alice, die einen SURB enthält, warten, um diesen SURB für eine erneute Antwort zu verwenden. Nach der einmaligen Verwendung eines SURBs werden alle weiteren Nachrichten, die mit Hilfe dieses SURBs versendet werden, wie Duplikate betrachtet und verworfen.
 
 \subsection{Nachrichten}
 \subsubsection{Typisierung}
-Bisher existierten in den Remailer-Protkollen nur eine Art von Nachricht -- eine anonyme Nachricht von Alice an Bob. Die Hinzunahme von Antwortnachrichten, die gesondert behandelt werden müssen, ist die Einführung einer Typisierung von Nachrichten für das Mixminion-Remailer Protokoll unerlässlich. Hierbei werden zwischen drei Arten von Nachrichten unterschieden:
+Bisher existierten in den Remailer-Protkollen nur eine Art von Nachricht -- eine anonyme Nachricht von Alice an Bob. Die Hinzunahme von Antwortnachrichten, die gesondert behandelt werden müssen, ist die Einführung einer Typisierung von Nachrichten für das Mixminion-Remailer Protokoll unerlässlich. Hierbei werden zwischen drei Arten von Nachrichten unterschieden\footnote{vgl. S. 4 \cite{mixminion}}:
 
 \begin{enumerate}
 \item normale Nachrichten
@@ -39,7 +39,7 @@ Bisher existierten in den Remailer-Protkollen nur eine Art von Nachricht -- eine
 \item anonyme Antworten
 \end{enumerate}
 
-Eine normale Nachricht entspricht hierbei einer anonymisierten Nachricht von Alice zu Bob, wie sie aus den bisherigen Protokollen bekannt ist. Bei einer direkten Antwort über einen SURB gibt Bob gibt Bob seine Identität preis. Da er nicht weiß, ob er wirklich Alice antwortet, denkbar wäre auch, dass Alice die Adresse eines Dritten in dem SURB angegeben hat, ist es wünschenswert, dass Bob ebenfalls die Möglichkeit hat bei einer Antwort anonym zu bleiben\footnote{das ist nur ein beispielhafter Grund. Logischerweise könnte Bob auch aus anderen Gründen anonym bleiben wollen}. Hierfür existiert die dritte Art einer Nachricht. Hierbei bleibt die Identität von Bob auch dem Empfänger der Antwort verborgen.
+Eine normale Nachricht entspricht hierbei einer anonymisierten Nachricht von Alice zu Bob, wie sie aus den bisherigen Protokollen bekannt ist. Bei einer direkten Antwort über einen SURB gibt Bob bei der Antwort seine Identität preis. Da er nicht weiß, ob er wirklich Alice antwortet, denkbar wäre auch, dass Alice die Adresse eines Dritten in dem SURB angegeben hat, ist es wünschenswert, dass Bob ebenfalls die Möglichkeit hat bei einer Antwort anonym zu bleiben\footnote{das ist nur ein beispielhafter Grund. Logischerweise könnte Bob auch aus anderen Gründen anonym bleiben wollen}. Hierfür existiert die dritte Art einer Nachricht. Hierbei bleibt die Identität von Bob auch dem Empfänger der Antwort verborgen.
 
 \subsubsection{Ununterscheidbarkeit}
 Bereits in den vorherigen Kapiteln wurde darauf hingewiesen, dass es für die Gewährleistung der Sicherheit unerlässlich ist, dass der Datenverkehr innerhalb des Remailer-Netzwerks für einen potentiellen Angreifer Eve transparent sein muss. Eve darf nicht dazu in der Lage sein durch die Analyse des Datenverkehrs eine Verbindung zwischen einkommenden und ausgehenden Nachrichtenvekehr herstellen zu können.
@@ -61,7 +61,7 @@ Jede Nachricht im Mixminion-Protokoll besteht dabei grundlegend aus den Komponen
 
 Signifikant ist, dass der Header sich in zwei Teile aufteilt -- dem primären und dem sekundären Header. Dabei haben sowohl der primäre als auch der sekundäre Header jeweils eine Größe von 2kB und der Body eine Größe von 28kB. Der Body einer Nachricht enthält, unabhängig vom Typ der Nachricht, in jedem Fall die eigentlich zu übertragende Information; im letzten Schritt also die Nachricht des Senders an den Empfänger. Die Typisierung einer Nachricht wird durch den Inhalt des primären und sekundären Headers unterschieden.
 
-(hier Bild mit Struktur der drei Nachrichtentypen, wichtig ist der Inhalt der Header, einfach in Textform rein?)
+(hier Bild mit Struktur der drei Nachrichtentypen, wichtig ist der Inhalt der Header, einfach in Textform rein? Bild aus http://www.mixminion.net/minion-design.pdf seite 4 nehmen!)
 
 Die obige Abbildung beschreibt den Inhalt des primären und des sekundären Header in den verschiedenen Nachrichtenfällen.
 Man sieht, dass sowohl der primäre als auch der sekundäre Header im Falle einer normalen Nachricht, als auch der primäre Header im Falle einer anonymen Antwort, Pfadinformationen durch das Netzwerk beinhalten.
@@ -74,9 +74,9 @@ Ein solcher Pfad ist selbst wieder in Subheader aufgeteilt. Jeder Subheader ents
 Der Pfad des primären und der Pfad des sekundären Headers ergeben, im Falle einer normalen Nachricht, zusammen den Gesamtpfad der Nachricht durch das Remailer-Netzwerk zum Empfänger. Dabei entspricht der Pfad im primären Header dem ersten Teil, der Teil im sekundären Header dem zweiten Teil des Pfades.
 Sowohl der primäre als auch der sekundäre Header können sich maximal aus 16 dieser Subheader zusammensetzen. Demzufolge ist die maximale Länge der Route einer normalen Nachricht im Mixminion-Protokoll 32.
 
-- normale Nachrichten: primärer und sekundärer Header vom Absender befüllt (logisch)
-- direkte Antwort: sekundärer Header mit beliebigen Daten gefüllt (?)
-- anonyme Antwort: im sekundären Header ist SURB des Antworters (ursprünglicher Empfänger Bob).
+Bei einer direkten Antwort von Bob ist der SURB im primären Header der, der von Alice zum Antworten übermittelt wurde. Da in diesem alle Informationen enthalten sind, die benötigt werden um die Nachricht bis Alice durchzustellen, befinden sich im sekundären Header in diesem Fall keine signifikanten Informationen. Um den gleichartigen Schein zu wahren, wird der sekundäre Header mit Platzhalterdaten gefüllt.
+
+Bei einer anonymen Antwort befindet sich der SURB von Alice im sekundären Header. Im primären Header befindet sich ein von Bob spezifizierter Pfad durch das Netzwerk, der vor dem Pfad des SURBs durchlaufen wird. Dadurch bleibt die Identität von dem Antworter Bob dem Empfänger der Antwort verborgen\footnote{vgl. S. 4 \cite{mixminion}}.
 
 \subsection{Verzeichnisserver}
 - Verzeichnis auf mehrere Server verteilt
