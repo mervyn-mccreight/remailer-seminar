@@ -61,7 +61,14 @@ Jede Nachricht im Mixminion-Protokoll besteht dabei grundlegend aus den Komponen
 
 Signifikant ist, dass der Header sich in zwei Teile aufteilt -- dem primären und dem sekundären Header. Dabei haben sowohl der primäre als auch der sekundäre Header jeweils eine Größe von 2kB und der Body eine Größe von 28kB. Der Body einer Nachricht enthält, unabhängig vom Typ der Nachricht, in jedem Fall die eigentlich zu übertragende Information; im letzten Schritt also die Nachricht des Senders an den Empfänger. Die Typisierung einer Nachricht wird durch den Inhalt des primären und sekundären Headers unterschieden.
 
-(hier Bild mit Struktur der drei Nachrichtentypen, wichtig ist der Inhalt der Header, einfach in Textform rein? Bild aus http://www.mixminion.net/minion-design.pdf seite 4 nehmen!)
+\begin{figure}
+	\begin{center}
+		\def\svgwidth{0.9 \linewidth}
+		\includegraphics[width = 0.9 \linewidth]{bilder/mixminion_structure.png}
+		\caption{Die Struktur von Nachrichten im Mixminion-Protokol}
+		\caption*{\hfill Source: S. 4 \cite{mixminion}}
+	\end{center}
+\end{figure}
 
 Die obige Abbildung beschreibt den Inhalt des primären und des sekundären Header in den verschiedenen Nachrichtenfällen.
 Man sieht, dass sowohl der primäre als auch der sekundäre Header im Falle einer normalen Nachricht, als auch der primäre Header im Falle einer anonymen Antwort, Pfadinformationen durch das Netzwerk beinhalten.
@@ -79,28 +86,27 @@ Bei einer direkten Antwort von Bob ist der SURB im primären Header der, der von
 Bei einer anonymen Antwort befindet sich der SURB von Alice im sekundären Header. Im primären Header befindet sich ein von Bob spezifizierter Pfad durch das Netzwerk, der vor dem Pfad des SURBs durchlaufen wird. Dadurch bleibt die Identität von dem Antworter Bob dem Empfänger der Antwort verborgen\footnote{vgl. S. 4 \cite{mixminion}}.
 
 \subsection{Verzeichnisserver}
-- Verzeichnis auf mehrere Server verteilt
-- alle VZ-Server werden ständig synchronisiert, sind also zueinander redundant
-- VZ-Server verifizieren sich gegenseitig, um Einführen von manipulierten VZ-Servern zu vermeiden.
--- soll ausfallsicherheit gewährleisten
-- informiert Benutzer über Status und Schlüssel der versch. Remailer im Netzwerk
-- jeder Remailer im Netzwerk registriert sich anfangs beim Verzeichnisserver
-- Remailer aktualisiert VZ-Server laufend über Zustand und Schlüssel
+Eine weitere Neuerung im Mixminion-Protkoll ist die Einführung von Verzeichnisservern. Ein Verzeichnisserver trägt für jeden Mixminion-Remailer im Netzwerk drei unmittelbar relevante Informationen\footnote{vgl. S. 8 \cite{mixminion}}:
+\begin{itemize}
+\item Die Existenz eines Remailers
+\item Den aktuellen Schlüssel des Remailers
+\item Den aktuellen Status des Remailers
+\end{itemize}
+
+Alle drei Eigenschaften werden den Verzeichnisservern von den Remailern selbst mitgeteilt.
+Wichtig ist, dass es nicht nur einen Verzeichnisserver pro Netzwerk gibt. Pro Netzwerk gibt es mehrere Verzeichnisserver. Diese verschiedenen Verzeichnisserver müssen dauerhaft synchronisiert sein, sodass sichergestellt ist, dass sie die gleichen Daten bezüglich des Remailernetzwerks verteilen (Redundanz). Dadurch wird auch verhindert, dass nicht funktionstüchtige Remailer weiter von einem Benutzer in deren Nachrichtenpfad eingebaut werden. Dies würde dazu führen, dass eine Nachricht nie ihren Empfänger erreichen würde. Des weiteren haben die Verzeichnisserver die Aufgabe, sich dauerhaft gegenseitig zu verifizieren. Dadurch wird verhindert, dass ein Angreifer einen manipulierten Verzeichnisserver einspielt, um beispielsweise alle Daten nur über bestimmte Remailer laufen zu lassen\footnote{vgl. S. 9 \cite{mixminion}}. Bei dieser Vorgehensweise wird davon ausgegangen, dass nicht alle Verzeichnisserver manipuliert sind, da ansonsten die gegenseitige Verifikation und Synchronization hinfällig wäre.
 
 \section{Ablauf}
-- Alice besorgt sich vom VZ-Server alle benötigten Informationen (Status und Schlüssel), um Pfad auszuwählen.
-- Versenden und Verschlüsseln äquivalent zu Mixmaster.
-- Vor Weiterleitung überprüft Remailer Integrität der Nachricht (wie Mixmaster)
-- Dann baut Remailer verschlüsselte Verbindung (TLS) zum nächsten Remailer auf.
--- sym. Schlüssel dafür findet er in Header (Master Secret)
-- Dann Weiterleitung
+Möchte Alice eine Nachricht an Bob senden, benötigt sie zunächst alle nötigen Informationen vom Verzeichnisserver. Von diesem erhält sie zu jedem Remailer im Netzwerk dessen Status und aktuellen Schlüssel. Die schichtweise Verschlüsselung der Nachricht geschieht äquivalent zum Mixmaster Protokoll. Zusätzlich wird der sekundäre Header mit der Prüfsumme des Nachrichtenbodies verschlüsselt.
+Anschließend sendet sie die Nachricht an den ersten Remailer im Pfad.
 
-- Verhalten beim Übergang zw. ersten Teil und zweiten Teil des Pfades (swap-Operation? genauer Herausfinden...)
+Empfängt nun ein Remailer eine Nachricht, wird zunächst die Integrität der Daten über die im Subheader angegebene Prüfsumme überprüft. Anschließend baut er mit Hilfe des ebenfalls im Subheader angegebenen Master-Secrets eine gesicherte Verbindung (TLS) zum nächsten Remailer im Pfad auf und überträgt die Nachricht an diesen, nachdem er sie entsprechend der schichtweisen Verschlüsselung für seinen Teil entschlüsselt hat. Danach wird die gesicherte Verbindung wieder aufgelöst.
 
+Die Stelle, an der der gesamte Pfad des primären Headers durchlaufen ist, wird "Crossover"-Punkt genannt. An diesem Punkt wird der sekundäre Header mit Hilfe der Prüfsumme des Nachrichtenbodies entschlüsselt und der primäre mit dem sekundären Header vertauscht\footnote{dieser Vorgang wird als swap operation bezeichnet. Vgl. S. 4-5 \cite{mixminion}}. Wurde eine Nachricht in der Zwischenzeit in irgendeiner Form manipuliert, ändert sich die Prüfsumme des Nachrichtenbodies und der sekundäre Header ist nicht wiederherstellbar. In diesem Fall wird die Nachricht an diesem Punkt verworfen\footnote{vgl. S. 5 \cite{mixminion}}. Dadurch werden Attacken, die ein manipulieren der Nachricht benötigen, verhindert. Nachdem der sekundäre Header erfolgreich entschlüsselt und entsprechend vertauscht wurde, wird wie im vorherigen Ablauf weiter verfahren, bis die Nachricht letztendlich zu Bob weitergeleitet wird. 
 
 \section{Sicherheitsanalyse}
-- theoretisch sicherster Remailer
-- aber praktisch nicht nachzuweisen
-- da nie in den praktischen Einsatz gekommen (blieb im Beta-Stadium, wurde nie fertig entwickelt).
+In der Theorie handelt es sich bei dem Mixminion-Protokoll um das sicherste der drei hier betrachteten Remailer-Protokolle. Beim Design wurden neuste Forschungsergebnisse und durch die älteren Remailer-Protokolle gesammelten Erfahrungen genutzt, um sich gegen bekannte typische Angriffe gegen Remailer zu schützen\footnote{vgl. S. 5ff \cite{mixminion}}. Ebenso wurden viele Mängel der früheren Remailer-Protkolle herausgearbeitet und beseitigt. 
+
+Das Mixminion Protokoll ist jedoch nie in einem vollständigen Zustand implementiert worden. Es ist seit je her nie über die Beta-Phase der Implementierung hinaus gekommen. So existieren unter Umständen noch Fehler in der Implementierung, die die Sicherheit des Systems gefährden. Außerdem laufen viele Mixminion-Remailer aufgrund ihrer unfertigen Implementierung noch mit Debug-Einstellungen, sodass Aktivitäten geloggt werden. Dieser Zustand gewährleistet keine Sicherheit, insofern wird das Protokoll in der Praxis nicht aktiv genutzt. Dadurch konnten bisher auch keine praktischen Erfahrungen bzgl. der Sicherheit dieses Remailer-Protokolls gesammelt werden.
 
 
