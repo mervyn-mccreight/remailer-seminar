@@ -1,16 +1,14 @@
 \chapter{Nym Server}
 
 \section{Motivation}
-- TypI-II anonymisierende Remailer.
--- es gibt keine Möglichkeit zu antworten.
-- Typ0 war pseudonymisierend, bot diese Möglichkeit also schon,
--- aber Betreiber besaß Zuordnung zw. Pseudonym und Identität, ist also per Definition kein Nym-Server (quelle: https://www.techopedia.com/definition/1696/nym-server)
---- einerseits dadurch Schwachstelle vorhanden
---- andererseits Betreiber dadurch angreifbar (s. typ0-remailer scientology shit)
+In den beiden vorherigen Kapiteln wurden die Typ-I und Typ-II Remailer vorgestellt. Bei beiden handelt es sich um anonymisierende Remailer. Die Konsequenz davon ist, dass die Identität des Senders zwar verborgen bleibt, es auf diesem Weg jedoch auch unmöglich ist einem Absender einer Nachricht zu antworten. Um diese Funktionalität anbieten zu können wurden Nym-Server entwickelt.
 
-- ziel von nym servern also: pseudonymisierung ermöglichen, ohne bekannte zuordnung zw. pseudonym und tatsächlicher identität.
+Ein Nym-Server ist ein Pseudonym-Server, der es seinen Benutzern erlaubt für sich auf ihm ein Pseudonym zu hinterlegen. Nun sind die Benutzer mit Pseudonym über den Nym-Server von anderen Personen über deren Pseudonym erreichbar, ohne dass andere Personen die reale Identität, die sich hinter dem Pseudonym verbirgt, erfahren.
+
+Bei dem Typ-0-Remailer war es bereits möglich einem Absender einer Nachricht auf diese zu antworten. Grund dafür ist, dass der Typ-0-Remailer auch nur pseudonymisierend war. Er ersetzte die Absenderadresse durch ein Pseudonym und besaß eine Zuordnungstabelle zwischen Pseudonymen und tatsächlichen Identitäten. Dadurch war es einem Typ-0-Remailer möglich, Nachrichten die an ein Pseudonym gesendet wurden, an die tatsächliche Adresse weiterzuleiten. Der große Nachteil dieser Technik ist jedoch, dass einem Betreiber eines Typ-0-Remailers auf diese Weise eine Zuordnung zwischen verwendeten Pseudonymen und Identität vorliegt. Einerseits stellt diese Zuordnung eine starke Schwachstelle dar, da ein Angreifer möglicherweise dazu in der Lage ist diese Zuordnung ebenfalls zu erhalten, andererseits macht sich der Betreiber selbst angreifbar. So kann es dazu kommen, dass er z.B. durch den Staat dazu gezwungen wird die Identität eines Pseudonyms preis zu geben. Per Definition handelt es sich daher bei den Typ-0-Remailern nicht um Nym-Server\footnote{vgl. \cite{nymdefinition}}.
 
 \section{Umsetzung mit Hilfe von Typ-I Remailern}
+- ziel von nym servern also: pseudonymisierung ermöglichen, ohne bekannte zuordnung zw. pseudonym und tatsächlicher identität.
 - Idee: Nym-Server mit Hilfe von Typ-I-Remailer Protokoll umsetzen.
 - Statt Zuordnung Pseudonym - realer Identität -> Pseudonym - Reply Block (quelle: loesing2009privacy s. 25)
 -- Reply Block ermöglicht Zustellung von Nachricht über Remailer-Netzwerk an realen Empfänger
