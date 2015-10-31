@@ -14,14 +14,6 @@
 % Um .eps Files einzubinden 
 \usepackage{epstopdf} 
 
-\AtBeginSubsection[]
-{
-  \begin{frame}
-    \frametitle{Table of Contents}
-    \tableofcontents[currentsection,currentsubsection]
-  \end{frame}
-}
-
 \AtBeginSection[]
 {
   \begin{frame}
@@ -60,11 +52,14 @@
 			\item Anonymisierend
 			\pause
 			\item Inspiration: Mix-Netzwerke \textit{(David Chaum)}
+			\pause
+			\item E-Mail Protokoll
 		\end{itemize}
 	\end{block}
 \end{frame}
 
 \begin{frame}
+	\frametitle{Cypherpunk-Remailer}
 	\begin{block}{Basis des Protokolls}
 		Netzwerk von mehreren verschiedenen Cypherpunk-Remailern
 	\end{block}
@@ -84,11 +79,108 @@
 				\item öffentlicher Schlüssel \(D_{C}\)
 				\item privater Schlüssel \(E_{C}\)
 				\item Nachricht entschlüsseln und weiterleiten
+				\item Nachrichten-Header modifizieren
 			\end{itemize}	
 			\end{center}
 		\end{column}
 	\end{columns}
 \end{frame}
+
+\subsection{Funktionsweise}
+\begin{frame}
+	\frametitle{Cypherpunk-Remailer - Vorbereitung}
+	\begin{block}{Alice kennt:}
+		\begin{itemize}
+			\item Remailer-Netzwerk \(C_1, C_2, ..., C_n\)
+			\item öffentliche Schlüssel \(E_{C_1}, E_{C_2}, ..., E_{C_n}\)
+		\end{itemize}	
+	\end{block}
+
+	\begin{block}{Alice muss}
+	\begin{itemize}
+		\item Auswahl Remailer
+		\item Reihenfolge bestimmen
+	\end{itemize}	
+	\end{block}
+
+	\begin{exampleblock}{Ziel}
+		Nachricht wird über Pfad an Bob gesendet
+	\end{exampleblock}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Cypherpunk-Remailer - Vorbereitung}
+	\begin{block}{Inhalt einer Nachricht}	
+		\begin{itemize}	
+			\item Adresse \(A\)
+			\item Nachricht \(N\)
+		\end{itemize}	
+	\end{block}	
+	\begin{block}{schichtenweise Verschlüsselung}	
+		\begin{equation}
+			N' = (A_1, E_{C_1}(A_2, E_{C_2} (... (A_n,  E_{C_n}(A_{Bob}, E_{Bob}(N)))
+		\end{equation}
+	\end{block}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Cypherpunk-Remailer - Ablauf}
+	\begin{block}{Ablauf Sendevorgang}
+		\begin{itemize}
+			\item Alice sendet N' an \(C_1\)
+			\item \(C_1\) erhält \(A_2\) und verschlüsselte Nachricht
+			\item \(C_1\) sendet Nachricht an Adresse in \(A_2\)
+			\item \(C_2\) erhält \(A_3\) und verschlüsselte Nachricht
+			\item \((...)\)
+			\item \(C_n\) sendet Nachricht an Adresse von Bob
+		\end{itemize}	
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Cypherpunk-Remailer}
+	\begin{exampleblock}{Was haben wir erreicht?}	
+		\begin{itemize}	
+			\item \(C_x\) kennt nur unmittelbaren Nachfolger und Vorgänger
+			\item Bob kennt nur letzten Remailer
+			\item Alice kennt als Einzige gesamten Pfad
+		\end{itemize}	
+	\end{exampleblock}
+	\begin{center}
+		und \includegraphics[height=2cm]{bilder/eve.jpg} ?
+	\end{center}			
+\end{frame}	
+
+\subsection{Sicherheitsanalyse}
+\begin{frame}
+	\frametitle{Cypherpunk-Remailer - Sicherheitsanalyse}
+	\begin{alertblock}{Traffic Analyse}	
+		\begin{itemize}	
+			\item Nachrichtengröße
+			\item leitet Nachrichten sofort weiter
+		\end{itemize}	
+	\end{alertblock}
+
+	\begin{alertblock}{Replay Angriff}	
+		\begin{itemize}	
+			\item Eve kann Nachrichten abfangen und wieder einspielen
+			\item Duplikate werden nicht erkannt
+		\end{itemize}	
+	\end{alertblock}
+
+	\begin{columns}[T]
+		\begin{column}[T]{5cm}
+			\begin{center}
+				\includegraphics[height=3cm]{bilder/alice_sad.jpg}
+			\end{center}
+		\end{column}
+		\begin{column}[T]{5cm}
+			\begin{center}	
+				\includegraphics[height=3cm]{bilder/eve.jpg}
+			\end{center}
+		\end{column}
+	\end{columns}	
+\end{frame}	
 
 
 \end{document}
