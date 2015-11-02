@@ -163,8 +163,28 @@
 	\begin{block}{schichtenweise Verschlüsselung}	
 		\begin{equation}
 			N' = (A_1, E_{C_1}(A_2, E_{C_2} (... (A_n,  E_{C_n}(A_{Bob}, E_{Bob}(N)))
-		\end{equation}
+		\end{equation}	
 	\end{block}	
+
+	\begin{exampleblock}{Beispiel}	
+		\begin{center}
+		\includegraphics[height=1cm]{bilder/nachricht_bob.jpg}
+		\hspace{0.2cm}
+		$\rightarrow$
+		\hspace{0.2cm}
+		\includegraphics[height=1cm]{bilder/nachricht_cn.jpg}
+		\hspace{0.2cm}
+		$\rightarrow$ (...)
+		\hspace{0.2cm}
+		$\rightarrow$
+		\hspace{0.2cm}
+		\includegraphics[height=1cm]{bilder/nachricht_c2.jpg}
+		\hspace{0.2cm}
+		$\rightarrow$
+		\hspace{0.2cm}
+		\includegraphics[height=1cm]{bilder/nachricht_c1.jpg}
+		\end{center}
+	\end{exampleblock}	
 \end{frame}
 
 \begin{frame}
