@@ -9,6 +9,9 @@
 \usepackage[T1]{fontenc}
 \usepackage[automark]{scrpage2} 	 % Schickerer Satzspiegel mit KOMA-Script
 \usepackage{setspace}           	 % Allow the modification of the space between lines
+\usepackage{caption}
+
+\captionsetup[figure]{labelformat=empty}
 
 \usepackage{pdfpages}
 % Um .eps Files einzubinden 
@@ -39,6 +42,47 @@
 \begin{document}
 
 \frame{\titlepage}
+
+\section{Motivation}
+\begin{frame}
+	\frametitle{Warum Remailer?}
+	\begin{exampleblock}{Sitzung}
+	\begin{columns}[T]
+		\begin{column}{2.5cm}
+			\centering
+				\begin{figure}
+					\includegraphics[height=2.5cm]{bilder/modell.jpg}
+				\end{figure}
+		\end{column}
+		\begin{column}{7cm}	
+			\centering
+			\begin{itemize}	
+				\item Alice möchte Bob Nachricht senden
+				\item Normal: Schutz des Inhalts
+				\item Jetzt: Schutz der Identitäten
+			\end{itemize}
+		\end{column}
+	\end{columns}
+	\end{exampleblock}
+
+	\begin{alertblock}{Angreifer Eve möchte Ziele gefährden}
+		\begin{columns}[T]
+		\begin{column}{2.5cm}
+				\begin{figure}
+					\includegraphics[height=2cm]{bilder/eve.jpg}
+				\end{figure}
+		\end{column}
+		\begin{column}{8cm}
+			\begin{itemize}	
+				\item Netzwerk beobachten
+				\item Einsicht in Traffic
+				\item Pakete abfangen, senden, manipulieren und senden
+			\end{itemize}
+		\end{column}
+	\end{columns}
+	\end{alertblock}
+
+\end{frame}
 
 \section{Cypherpunk-Remailer}
 \begin{frame}
