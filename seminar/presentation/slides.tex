@@ -175,21 +175,37 @@
 
 	\begin{exampleblock}{Beispiel}	
 		\begin{center}
-		\includegraphics[height=1cm]{bilder/nachricht_bob.jpg}
-		\hspace{0.2cm}
+		\begingroup
+			\setbox0=\hbox{
+				\includegraphics[height=1cm]{bilder/nachricht_bob.jpg}}%
+			\parbox{\wd0}{\box0}
+		\endgroup
+		\hspace{0.1cm}
 		$\rightarrow$
-		\hspace{0.2cm}
-		\includegraphics[height=1cm]{bilder/nachricht_cn.jpg}
-		\hspace{0.2cm}
-		$\rightarrow$ (...)
-		\hspace{0.2cm}
+		\hspace{0.1cm}
+		\begingroup
+			\setbox0=\hbox{
+				\includegraphics[height=1cm]{bilder/nachricht_cn.jpg}}%
+			\parbox{\wd0}{\box0}
+		\endgroup
+		\hspace{0.1cm}
+		$\rightarrow$ \hspace{0.1cm} (...)
+		\hspace{0.1cm}
 		$\rightarrow$
-		\hspace{0.2cm}
-		\includegraphics[height=1cm]{bilder/nachricht_c2.jpg}
-		\hspace{0.2cm}
+		\hspace{0.1cm}
+		\begingroup
+			\setbox0=\hbox{
+				\includegraphics[height=1cm]{bilder/nachricht_c2.jpg}}%
+			\parbox{\wd0}{\box0}
+		\endgroup
+		\hspace{0.1cm}
 		$\rightarrow$
-		\hspace{0.2cm}
-		\includegraphics[height=1cm]{bilder/nachricht_c1.jpg}
+		\hspace{0.1cm}
+		\begingroup
+			\setbox0=\hbox{
+				\includegraphics[height=1cm]{bilder/nachricht_c1.jpg}}%
+			\parbox{\wd0}{\box0}
+		\endgroup
 		\end{center}
 	\end{exampleblock}	
 \end{frame}
