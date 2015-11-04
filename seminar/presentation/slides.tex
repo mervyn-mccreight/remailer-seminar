@@ -578,5 +578,70 @@
 	\end{itemize}
 \end{frame}
 
+\begin{frame}
+	\frametitle{Nym-Server}
+	\centering
+	Sicherheit?
+\end{frame}
+
+\section{Mixminion-Remailer}
+
+% Motivation-Folie
+% Nym-Server unsicher (s. Typ-I)
+% Antworten auf anonym. Nachrichten
+% Typ-I und II unzuverlässig (Ausfall?)
+% auch: noch sicherer machen.
+
+% Umsetzung-Folie
+% Was bleibt gleich?
+% Netzwerkstruktur
+% schichtweise Verschlüsselung (nur noch Pfad)
+% anonym
+% Traffic-Transparenz
+% Nachrichtenpool (?)
+
+% Was ist neu?
+% eigenes Protokoll (nicht e-Mail)
+% Kommunikation TLS
+% automatisches vs. manuelles Verzeichnis
+% Antworten
+
+% Struktur Nachricht im eigenen Protokoll
+% Folie mit Bild aus Ausarbeitung
+% erst generell erklären, es gibt 3 Typen und deren Nutzen
+%% prim. und sek. Header
+%% Payload für Nachricht
+%% hinweisen: gleiche Größe und Struktur für alle drei Typen - Traffictransparenz!
+
+%% neue Folie mit Bild
+% norm. Nachricht erklären
+% Erklärung für Sender-Onion Aufbau (Subheader plus Inhalt)
+% NUR kurz sagen, dass prim. und sek. Header zusammen gesamte Route sind
+
+%% neue Folie nur mit Bild
+% Reply Erklären
+% Inhalt von SURB erläutern
+% Warum Random-Data?
+% Payload = Antwortnachricht
+
+%% neue Folie nur mit Bild
+% Anonym. Reply erklären
+% Wozu Sender-Onion hier?
+
+% Verzeichnisserver
+% Aufzählung was er beinhaltet
+% Ablauf erklären
+% was machen VZ-Server?
+% wie kriegen sie Remailerdaten?
+
+% Einmal Ablauf durchspielen
+% Alice sendet Bob eine normale Nachricht
+
+% Sicherheitsanalyse
+% theoretisch sicher
+% praktisch? -> unbekannt, Implemetierung nie über beta hinausgekommen. keine Praxiserfahrung vorhanden.
+
+
+
 
 \end{document}
