@@ -295,5 +295,180 @@
 	\end{columns}	
 \end{frame}
 
+\section{Mixmaster-Remailer}
+
+\begin{frame}
+	\frametitle{Mixmaster-Remailer - Motivation}
+	\begin{itemize}
+		\item Baut auf Cypherpunk-Remailer auf
+		\item Basis: "Mixmaster and remailer attacks" (Lance Cottrell)
+		\begin{itemize}	
+			\item deckt Sicherheitsschwächen auf
+			\item bietet Lösungsansätze
+		\end{itemize}
+	\end{itemize}
+
+	\begin{exampleblock}{Ziel}
+		\centering
+		Weiterentwicklung des existierenden Protokolls, um Sicherheitslücken zu schließen.
+	\end{exampleblock}
+\end{frame}
+
+\subsection{Funktionsweise}
+\begin{frame}
+	\frametitle{Mixmaster-Remailer - Funktionsweise}
+	\visible<1-2>{
+		\begin{block}{Was bleibt gleich?}
+			\begin{itemize}
+				\item Remailernetzwerk
+				\item schichtenweise Verschlüsselung
+				\item E-Mail Protokoll 
+			\end{itemize}
+		\end{block}
+	}
+	
+	\invisible<1>{
+		\begin{alertblock}{Ausblick: Was muss sich ändern?}
+			\begin{itemize}	
+				\item Traffic transparent gestalten
+				\item Zeitliche Zuordnung
+				\item Duplikate erkennen
+				\item Manipulierte Nachrichten erkennen
+			\end{itemize}
+		\end{alertblock}
+	}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Mixmaster-Remailer - Chunks}
+	\begin{exampleblock}{Ziel}
+		Traffic transparent gestalten
+	\end{exampleblock}
+
+	\begin{itemize}	
+		\item Nachricht in gleich große Chunks aufteilen
+		\item Auffüllen mit zufälligen Dummy-Daten
+		\item Chunks statt Nachricht über Netzwerk verteilen
+		\item Jeder Chunk (möglichst) auf verschiedenem Pfad
+		\begin{itemize}
+			\item letzter Remailer im Pfad
+			\item Zusammensetzung
+			\item Weiterleitung
+		\end{itemize}	
+	\end{itemize}	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Mixmaster-Remailer - Pool}
+	\visible<1-2>{
+	\begin{exampleblock}{Ziel}
+		Zeitliche Zuordnung
+	\end{exampleblock}
+
+	\begin{itemize}	
+		\item Einkommende Nachrichten sammeln
+		\item beliebige Größe
+		\item zufällige Reihenfolge
+	\end{itemize}
+	}	
+
+	\invisible<1> {
+	\begin{alertblock}{Pool wird nie voll?}
+		\begin{itemize}
+			\item individueller Zeitpunkt
+			\item zufallsgenerierte Dummy-Nachrichten
+		\end{itemize}
+	\end{alertblock}
+	}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Mixmaster-Remailer - Integrität}
+	\begin{exampleblock}{Ziel}
+		Duplikate und Manipulation
+	\end{exampleblock}
+
+	\begin{block}{Signatur}
+		\begin{itemize}	
+			\item Erkennung von manipulierten Nachrichten
+			\item werden verworfen
+		\end{itemize}
+	\end{block}
+
+	\begin{block}{Identifikation}
+		\begin{itemize}
+			\item verschlüsselte ID
+			\item Duplikate werden erkannt
+			\item werden verworfen
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Mixmaster-Remailer - Ablauf}
+	\begin{itemize}
+		\item Alice benötigt Client-Software
+		\item Nachricht wird aufgeteilt
+		\item Chunks werden über das Netzwerk weitergeleitet
+		\item letzter Remailer sammelt Chunks
+		\item entfernt evtl. Dummy-Daten
+		\item setzt Nachricht zusammen und leitet an Bob	
+	\end{itemize}
+\end{frame}
+
+\subsection{Analyse}
+\begin{frame}
+	\frametitle{Mixmaster-Remailer - Sicherheitsanalyse}
+	\begin{exampleblock}{Traffic Analyse}
+		\begin{itemize}
+			\item einheitliche Nachrichtengröße
+			\item keine zeitliche Zuordnung
+			\item konstanter Traffic-Level
+		\end{itemize}
+	\end{exampleblock}
+
+	\begin{exampleblock}{Replay Angriff}
+		\begin{itemize}
+			\item Duplikate werden erkannt und ignoriert
+			\item Manipulationen werden erkannt und ignoriert
+		\end{itemize}
+	\end{exampleblock}
+
+	\centering
+	\includegraphics[height=2cm]{bilder/alice.jpg} ?
+\end{frame}
+
+\begin{frame}
+	\visible<1-2>{
+	\frametitle{Mixmaster-Remailer - Sicherheitsanalyse}
+	\begin{alertblock}{Angriffsmöglichkeit}
+		\begin{itemize}
+			\item Nachricht von Alice abfangen und zurückhalten
+			\item Überflütung des Remailernetzwerks mit eigenen Nachrichten
+			\item Keine anderen Nachrichten außer Eves mehr im Netzwerk
+			\item Einspielen von Alice Nachricht
+			\item Empfänger dieser Nachricht muss Bob sein
+		\end{itemize}
+	\end{alertblock}
+	}
+
+	\invisible<1>{
+	\centering
+	Aber:
+	\begin{columns}[T]
+		\begin{column}[T]{5cm}
+			\begin{center}
+				\includegraphics[height=2.5cm]{bilder/alice.jpg}
+			\end{center}
+		\end{column}
+		\begin{column}[T]{5cm}
+			\begin{center}	
+				\includegraphics[height=2.5cm]{bilder/eve_sad.jpg}
+			\end{center}
+		\end{column}
+	\end{columns}	
+	}	
+\end{frame}
+
 
 \end{document}
