@@ -470,5 +470,113 @@
 	}	
 \end{frame}
 
+\section{Nym-Server}
+
+\begin{frame}
+	\frametitle{Nym-Server - Motivation}
+	\begin{itemize}
+		\item bisher - Anonymisierung
+		\begin{itemize}	
+			\item Identität ist verborgen
+			\item Bob kennt nur letzten Remailer
+			\item antworten nicht möglich
+		\end{itemize}
+		\pause
+		\item nun - Pseudonymisierung
+		\begin{itemize}	
+			\item Identität versteckt hinter Decknamen
+			\item Bob kennt Decknamen
+			\item antworten möglich
+		\end{itemize}
+	\end{itemize}
+
+	\pause
+	Typ-0 Remailer?
+	\pause
+
+	\begin{block}{Definition (Quelle - techopedia.com)}
+		A nym server is a pseudonym server that furnishes an untraceable email address. The purpose of this server is to allow users to have usernames (pseudonyms) and send and 			receive messages without revealing their true identities.
+		Even the nym server operators cannot trace a user's email address.
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Nym-Server - Umsetzung}
+
+	\begin{block}{Ziele}
+		\begin{itemize}
+			\item Schicken und Empfangen über Pseudonym
+			\item Betreiber transparent für Betreiber
+		\end{itemize}
+	\end{block}
+
+	\pause
+
+	Idee: Umsetzung über Cypherpunk-Remailer
+	
+\end{frame}
+
+\begin{frame}
+	\frametitle{Nym-Server - Umsetzung}
+
+	\begin{block}{Bestandteile eines Nyms}
+		\begin{itemize}
+			\item öffentlicher Schlüssel
+			\item Reply-Block
+			\item Pseudonym
+		\end{itemize}
+	\end{block}
+
+	\pause
+
+	\begin{block}{Reply-Block}
+		\begin{itemize}
+			\item Enthält Pfad über Cypherpunk-Remailer Netzwerk zum Empfänger hinter dem Nym.
+			\item schichtenweise verschlüsselt
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Nym-Server - Ablauf (Erstellung)}
+
+	\begin{itemize}
+		\item Bob möchte Pseudonym
+		\begin{itemize}
+			\item sucht sich Menge an Cypherpunk-Remailern heraus
+			\item erstellt Reply-Block
+			\item denkt sich Pseudonym aus
+			\item stellt öffentlichen Schlüssel bereit
+		\end{itemize}
+		\item schickt Nym an Nym-Server
+		\item Achtung: Muss anonymisiert gesendet werden!
+		\item (ggf. Validierung des Nyms vom Nym-Server)
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Nym-Server - Ablauf (Verwendung)}
+
+	\begin{itemize}
+		\item Alice 
+		\begin{itemize}
+			\item kennt Bobs Pseudonym
+			\item möchte Bob eine Nachricht zukommen lassen
+			\item schickt Nachricht an Bobs Pseudonym an den Nym-Server
+		\end{itemize}
+
+		\pause
+
+		\item Nym-Server
+		\begin{itemize}
+			\item findet den Nym
+			\item verschlüsselt Nachricht mit öffentlichem Schlüssel
+			\item schickt Nachricht mit Reply-Block an ersten Remailer im Block
+		\end{itemize}
+
+		\item Nachricht von Alice wird über Remailernetzwerk an Bob geschickt
+	\end{itemize}
+\end{frame}
+
 
 \end{document}
