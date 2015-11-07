@@ -586,60 +586,209 @@
 
 \section{Mixminion-Remailer}
 
-% Motivation-Folie
-% Nym-Server unsicher (s. Typ-I)
-% Antworten auf anonym. Nachrichten
-% Typ-I und II unzuverlässig (Ausfall?)
-% auch: noch sicherer machen.
+\begin{frame}
+	\frametitle{Mixminion - Motivation}
+	
+	\begin{itemize}
+		\item Aktualität
+		\item Nym-Server unsicher
+		\item Zuverlässigkeit
+	\end{itemize}
+\end{frame}
 
-% Umsetzung-Folie
-% Was bleibt gleich?
-% Netzwerkstruktur
-% schichtweise Verschlüsselung (nur noch Pfad)
-% anonym
-% Traffic-Transparenz
-% Nachrichtenpool (?)
+\begin{frame}
+	\frametitle{Mixminion - Umsetzung Übersicht}
 
-% Was ist neu?
-% eigenes Protokoll (nicht e-Mail)
-% Kommunikation TLS
-% automatisches vs. manuelles Verzeichnis
-% Antworten
+	\begin{block}{Was bleibt gleich?}
+		\begin{itemize}
+			\item Netzwerkstruktur
+			\item Anonymisierung
+			\item Traffictransparenz
+			\item schichtenweise Verschlüsselung (Header)
+		\end{itemize}
+	\end{block}
 
-% Struktur Nachricht im eigenen Protokoll
-% Folie mit Bild aus Ausarbeitung
-% erst generell erklären, es gibt 3 Typen und deren Nutzen
-%% prim. und sek. Header
-%% Payload für Nachricht
-%% hinweisen: gleiche Größe und Struktur für alle drei Typen - Traffictransparenz!
+	\begin{block}{Was ist neu?}
+		\begin{itemize}
+			\item eigenes Protokoll
+			\item verschlüsselte Verbindung (TLS)
+			\item automatisches Remailerverzeichnis
+			\item Antworten auf anonymisierte Nachrichten
+		\end{itemize}
+	\end{block}
+\end{frame}
 
-%% neue Folie mit Bild
-% norm. Nachricht erklären
-% Erklärung für Sender-Onion Aufbau (Subheader plus Inhalt)
-% NUR kurz sagen, dass prim. und sek. Header zusammen gesamte Route sind
+\begin{frame}
+	\frametitle{Mixminion - Protokoll}
 
-%% neue Folie nur mit Bild
+	\begin{columns}[T]
+		\begin{column}{5cm}
+			\begin{figure}
+				\centering
+				\includegraphics[height=5cm]{bilder/mixminion_messages.jpg}
+			\end{figure}
+		\end{column}
+		\begin{column}{5cm}	
+			\centering
+			\begin{itemize}	
+				\vspace{2cm}
+				\item drei Typen
+				\item Ununterscheidbarkeit
+				\item zweigeteilter Header
+			\end{itemize}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Mixminion - normale Nachricht}
+
+	\begin{columns}[T]
+		\begin{column}{5cm}
+			\begin{figure}
+				\centering
+				\includegraphics[height=5cm]{bilder/mixminion_standard.jpg}
+			\end{figure}
+		\end{column}
+		\begin{column}{5cm}
+			\begin{block}{Subheader}	
+				\begin{itemize}	
+					\item Master-Secret für TLS
+					\item Adresse des nächsten Remailers (verschlüsselt)
+					\item Prüfsumme zur Überprüfung restlichen Headers
+				\end{itemize}
+			\end{block}
+		\end{column}
+	\end{columns}
+\end{frame}
+
+
 % Reply Erklären
 % Inhalt von SURB erläutern
 % Warum Random-Data?
 % Payload = Antwortnachricht
+\begin{frame}
+	\frametitle{Mixminion - einfache Antwort}
+
+	\begin{columns}[T]
+		\begin{column}{3cm}
+			\begin{figure}
+				\centering
+				\includegraphics[height=5cm]{bilder/mixminion_reply.jpg}
+			\end{figure}
+		\end{column}
+		\begin{column}{7cm}
+			\vspace{1cm}
+			\begin{block}{SURB}	
+				\begin{itemize}	
+					\item Adresse von Alice (verschlüsselt)
+					\item Pfad durch das Netzwerk (verschlüsselt)
+					\item nur einmal verwendbar
+					\item von Bob nicht entschlüsselbar
+				\end{itemize}
+			\end{block}
+		\end{column}
+	\end{columns}
+\end{frame}
 
 %% neue Folie nur mit Bild
 % Anonym. Reply erklären
 % Wozu Sender-Onion hier?
+\begin{frame}
+	\frametitle{Mixminion - anonyme Antwort}
+
+	\begin{columns}[T]
+		\begin{column}{3cm}
+			\begin{figure}
+				\centering
+				\includegraphics[height=5cm]{bilder/mixminion_anonreply.jpg}
+			\end{figure}
+		\end{column}
+		\begin{column}{7cm}
+				\vspace{2cm}
+				\begin{itemize}	
+					\item Pfad von Bob durch Netzwerk
+					\item SURB von Alice
+					\item Ziel: Auch Bob bleibt anonym.
+				\end{itemize}
+		\end{column}
+	\end{columns}
+\end{frame}
 
 % Verzeichnisserver
 % Aufzählung was er beinhaltet
 % Ablauf erklären
 % was machen VZ-Server?
 % wie kriegen sie Remailerdaten?
+\begin{frame}
+	\frametitle{Mixminion - Verzeichnisserver}
 
-% Einmal Ablauf durchspielen
-% Alice sendet Bob eine normale Nachricht
+	\begin{block}{Verzeichnisserver}
+		\begin{itemize}
+			\item aktuell verwendete Schlüssel des Remailers
+			\item aktuellen Zustand
+			\item die Existenz eines Remailers
+		\end{itemize}
+	\end{block}
+
+	\begin{itemize}
+		\item redundante Gruppe von Servern
+		\item regelmäßige Kommunikation
+		\begin{itemize}
+			\item untereinander (Verifikation)
+			\item Remailer (Synchronisation)
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Mixminion - Ablauf}
+	
+	\begin{itemize}
+		\item Alice besorgt sich aktuelle Informationen über Verzeichnisserver (Schlüssel, Adresse von Mix)
+		\item Aufbereitung der Nachricht gemäß Protokoll
+		\item Alice schickt Nachricht an ersten Remailer
+		\item Jeder Remailer:
+		\begin{itemize}
+			\item Prüft Integrität des Headers (Prüfsumme)
+			\item Speichert Prüfsumme (Replay-Angriff) bis Schlüsseltausch
+			\item TLS-Verbindung zum nächsten Remailer (verifiziert und verschlüsselt)
+			\item überträgt Nachricht
+		\end{itemize}
+		\item \textbf{swap-Operation}
+		\item danach weiter bis Bob Nachricht erhält
+	\end{itemize}
+\end{frame}
 
 % Sicherheitsanalyse
 % theoretisch sicher
 % praktisch? -> unbekannt, Implemetierung nie über beta hinausgekommen. keine Praxiserfahrung vorhanden.
+\begin{frame}
+	\frametitle{Mixminion - Sicherheitsanalyse}	
+	\centering
+	Sicherheit?
+
+	\begin{columns}[T]
+		\visible<1-2>{
+		\begin{column}{5cm}
+			\begin{figure}
+				\centering
+				\includegraphics[height=5cm]{bilder/mixminion_theorie.jpg}
+			\end{figure}
+		\end{column}
+		}
+
+		\invisible<1>{
+		\begin{column}{5cm}\begin{figure}
+				\centering
+				\includegraphics[height=5cm]{bilder/mixminion_praxis.jpg}
+			\end{figure}
+		\end{column}
+		}
+	\end{columns}
+\end{frame}
+
+
 
 
 
