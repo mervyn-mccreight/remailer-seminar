@@ -1,5 +1,28 @@
-\chapter{Grundlagen}
+\chapter{Einführung}
 
 \section{Motivation}
+Bis zur Entwicklung der Typ-0 Remailer\footnote{Nym-Remailer} lag der Fokus des allgemeinen Interesse darin, den Inhalt einer Nachricht, die über das Internet mit anderen Personen ausgetauscht wird, vor dem Einfluss dritter Personen zu schützen. Dies gelang durch Verschlüsselung des Nachrichteninhaltes mit Hilfe verschiedener gängiger Verschlüsselungsverfahren, die von Zeit zu Zeit immer effektiver wurden. Unter anderem ausgelöst durch die Einführung der Vorratsdatenspeicherung\footnote{verpflichtet unter Anderem Internetprovider, den Datenverkehr ihrer Kunden zu protokollieren und über einen bestimmten Zeitraum zu speichern.} entwickelte sich das Interesse auch den Absender und/oder Empfänger einer Nachricht vor Außenstehenden zu schützen, um einen Eingriff in die Privatsphäre zu verhindern. Zu diesem Zweck wurden sogenannte \emph{Remailer} entwickelt. Das Ziel von Remailern ist es, Nachrichten und deren Austausch zu entpersonalisieren, sodass Anonymität für Absender und Empfänger erreicht wird.
 
-\section{Zeitstrahl der Entwicklung}
+Die folgenden Kapitel dieser Ausarbeitung werden einen Einblick in das Design der Remailertypen I bis III bieten. Außerdem wird beleuchtet, inwiefern diese verschiedenen Remailertypen nicht nur zeitlich, sondern auch designtechnisch aufeinander eingewirkt haben. Zusätzlich dessen, dass die Prinzipien, mit deren Hilfe die verschiedenen Remailerprotokolle Anonymität gewährleisten, erläutert werden, werden die unterschiedlichen Typen im Bezug auf der Sicherheit der Anonymisierung und ihrer Zuverlässigkeit analysiert.
+
+\section{Sitzungsmodell}
+Im Laufe dieser Ausarbeitung wird auf ein einheitliches Sitzungsmodell zurückgegriffen. Dieses Sitzungsmodell modelliert allgemein die Ziele und Eigenschaften, die für den Anwender eines Remailers und dessen Nachricht gelten. Weiterhin umfasst das Modell auch einen potentiellen Angreifer, für den definiert wird, über welches Wissen und Fähigkeiten er verfügt. 
+
+Das Sitzungsmodell besteht im wesentlichen aus drei verschiedenen Personen:
+\begin{description}
+	\item[Alice] möchte eine Nachricht versenden. Für außenstehende Personen soll nicht ersichtlich sein, an wen diese Nachricht gesendet wird.
+	\item[Bob] ist der Empfänger der Nachricht. Für außenstehende Personen soll nicht ersichtlich sein, von wem die Nachricht gesendet wurde. 
+	\item[Eve] ist ein Angreifer. Sie möchte die Ziele von Bob und Alice gefährden, also die Anonymität von Alice und Bob aufheben.
+\end{description}
+
+\newpage
+Eve stehen dabei eine Vielzahl von Fähigkeiten zur Verfügung. Genauer definiert kann Eve:
+\begin{itemize}
+	\item das gesamte Netzwerk beobachten
+	\item den vollständigen Traffic einsehen
+	\item beliebige Pakete abfangen
+	\item beliebige Pakete modifzieren
+	\item beliebige Pakete versenden
+\end{itemize}
+
+Mit Hilfe dieser Fähigkeiten wird Eve versuchen die Anonymität von Bob und Alice zu kompromittieren. In diesem Fall gelingt es Eve einer Nachricht derer exakten Absender und Empfänger zuzuordnen. Der exakte Inhalt einer Nachricht ist für Eve in diesem Sitzungsmodell nicht zwingend interessant.
