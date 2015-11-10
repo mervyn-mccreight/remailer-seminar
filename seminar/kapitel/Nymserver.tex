@@ -5,6 +5,18 @@ In den beiden vorherigen Kapiteln wurden die Typ-I und Typ-II Remailer vorgestel
 
 Ein Nym-Server ist ein Pseudonym-Server, der es seinen Benutzern erlaubt für sich auf ihm ein Pseudonym zu hinterlegen. Nun sind die Benutzer mit Pseudonym über den Nym-Server von anderen Personen über deren Pseudonym erreichbar, ohne dass andere Personen die reale Identität, die sich hinter dem Pseudonym verbirgt, erfahren.
 
+\begin{figure}
+	\centering
+	\begin{sequencediagram}
+		\newinst{a}{Alice}
+		\newinst[4]{s}{Nym Server}
+		\newinst[4]{b}{Bob}
+		\mess{a}{Nachricht an Bobs Pseudonym}{s}
+		\mess{s}{Nachricht von Alice an Bob}{b}
+	\end{sequencediagram}
+	\caption{Senden einer Nachricht über einen Nym-Server (stark vereinfacht und prinzipiell)}
+\end{figure}
+
 Bei dem Typ-0-Remailer war es bereits möglich einem Absender einer Nachricht auf diese zu antworten. Grund dafür ist, dass der Typ-0-Remailer auch nur pseudonymisierend war. Er ersetzte die Absenderadresse durch ein Pseudonym und besaß eine Zuordnungstabelle zwischen Pseudonymen und tatsächlichen Identitäten. Dadurch war es einem Typ-0-Remailer möglich, Nachrichten die an ein Pseudonym gesendet wurden, an die tatsächliche Adresse weiterzuleiten. Der große Nachteil dieser Technik ist jedoch, dass einem Betreiber eines Typ-0-Remailers auf diese Weise eine Zuordnung zwischen verwendeten Pseudonymen und Identität vorliegt. Einerseits stellt diese Zuordnung eine starke Schwachstelle dar, da ein Angreifer möglicherweise dazu in der Lage ist diese Zuordnung ebenfalls zu erhalten, andererseits macht sich der Betreiber selbst angreifbar. So kann es dazu kommen, dass er z.B. durch den Staat dazu gezwungen wird die Identität eines Pseudonyms preis zu geben. Per Definition handelt es sich daher bei den Typ-0-Remailern nicht um Nym-Server\footnote{vgl. \cite{nymdefinition}}.
 
 \section{Umsetzung mit Hilfe von Typ-I Remailern}
@@ -22,7 +34,39 @@ Der Reply-Block beinhaltet hierbei im Wesentlichen einen Pfad durch ein Typ-I Re
 
 Möchte Bob ein Pseudonym bei einem solchen Nym-Server erstellen, muss er nun zuerst einen Reply-Block erzeugen. Anschließend schickt er diesen Reply-Block zusammen mit einem gewünschtem Pseudonym und einem öffentlichen Schlüssel gemeinsam an den Nym-Server. Der Nym-Server legt nun beim Empfang dieser Nachricht ein Nym mit den empfangenen Daten an\footnote{vgl. S. 25 \cite{loesing2009privacy}}. Wichtig hierbei ist, dass Bob die Nachricht anonymisiert an den Nym-Server sendet, damit dem Nym-Server selbst zu keinem Zeitpunkt die wahre Identität von Bob bekannt ist. Nun ist Bob für Alice über den angegebenen Pseudonym für Alice erreichbar.
 
+\begin{figure}
+	\centering
+	\begin{sequencediagram}
+		\newinst{a}{Bob}
+		\newinst[3]{r}{Cypherpunk-Remailernetzwerk}
+		\newinst[3]{s}{Nym Server}
+		\mess{a}{Nym}{r}
+		\mess{r}{Nym von Bob}{s}
+		\mess{s}{Testnachricht über Reply-Block}{r}
+		\mess{r}{Testnachricht über Reply-Block}{a}
+		\mess{a}{OK}{r}
+		\mess{r}{OK}{s}
+	\end{sequencediagram}
+	\caption{Registrierung eines Nyms}
+\end{figure}
+
+Zur Vereinfachung des Diagramms befindet sich der erste Remailer von Bobs Reply-Block in der obigen Abbildung im selben Remailernetzwerk, über das Bob seine Nymregistrierungsdaten anonymisiert an den Nym Server überträgt.
+
 Möchte Alice Bob nun eine Nachricht zukommen lassen, schickt sie die Nachricht an Bobs Pseudonym auf dem entsprechenden Nym-Server. Empfängt der Nym-Server eine Nachricht, die an ein ihm bekanntes Pseudonym gerichtet ist, verschlüsselt er die Nachricht mit dem im Nym angegebenen öffentlichen Schlüssel und reicht sie zusammen mit dem hinterlegten Reply-Block an den ersten Remailer der im Reply-Block angegebenen Kette von Remailern weiter. Für die eigentliche Zustellung der Nachricht ist nun das Remailer-Netzwerk, in dem sich die Remailer im angegebenen Pfad befinden, zuständig. Die Nachricht wird nun entsprechend des Typ-I-Remailer Protokolls durch das Netzwerk und letztendlich an Bob übertragen\footnote{vgl. S. 26 \cite{loesing2009privacy}}. Erhält Bob die Nachricht, ist er im letzten Schritt dazu in der Lage sie mit seinem privaten Schlüssel zu entschlüsseln und verfügt nun über die Nachricht. 
+
+\begin{figure}
+	\centering
+	\begin{sequencediagram}
+		\newinst{a}{Alice}
+		\newinst[2]{n}{Nym Server}
+		\newinst[2]{r}{Remailernetzwerk}
+		\newinst[2]{b}{Bob}
+		\mess{a}{N an Bobs Nym}{n}
+		\mess{n}{verschl. N + Reply-Block}{r}
+		\mess{r}{verschl. Nachricht}{b}
+	\end{sequencediagram}
+	\caption{Weiterleitung einer Nachricht an ein Pseudonym}
+\end{figure}
 
 Da nur dem letzten Remailer der im Reply-Block angegebenen Kette die echte Adresse von Bob bekannt ist, und der schichtartig verschlüsselte Reply-Block nur im Verlauf der Übertragung im Typ-I-Remailer Protokoll entschlüsselt werden kann, nicht jedoch vom Nym-Server, hat der Nym-Server zu keinem Zeitpunkt die Möglichkeit die wahre Identität von Bob zu erfahren. 
 
