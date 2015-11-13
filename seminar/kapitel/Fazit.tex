@@ -1,3 +1,59 @@
 \chapter{Zusammenfassung}
 
-\section{aktueller Stellenwert der einzelnen Typen}
+In den vorausgegangenen Kapiteln wurde die Funktionsweise der Protokolle der verschiedenen Remailertypen I - III betrachtet. Die Protokolle wurden insbesondere aus sicherheitstechnischer Sicht analysiert. So wurde für jeden Remailertyp behandelt, ob er gegen gängige Angriffsarten resistent ist, und welche Sicherheitsmechanismen entwickelt wurden, um eine Immunität der verschiedenen Angriffsarten zu gewährleisten.  Da diese drei Remailertypen auf dem Prinzip der Mixnetzwerke basieren, wurden Angriffstypen gewählt, die Mixnetzwerke potentiell gefährden können.
+
+Zu sehen ist, dass die Entwicklung der verschiedenen Remailertypen hauptsächlich fehlergetrieben war. So wurde ein folgendes Protokoll entwickelt, indem die Schwächen des vorherigen Protokolls analysiert wurden und versucht wurde, aufbauend auf das vorhergehende Protkoll diese Fehler zu beheben. So bauen diese drei Remailertypen alle auf einer gemeinsamen Designbasis auf. Im Laufe der Entwicklung der Typen wurde diese Basis durch inkrementelle Erweiterungen stetig verbessert.
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{c}
+		\textbf{Aktive Attacken}
+	\end{tabular}
+		
+	\begin{tabular}{m{7.5cm} || c | c | c}
+		\hline
+		\textbf{Angriffsart} & \textbf{Cypherpunk} & \textbf{Mixmaster} & \textbf{Mixminion} \\
+		\hline
+		Manipulation eines Remailers & $\surd$ & $\surd$ & $\surd$ \textbackslash ~? \\
+		Wiedereinspielung von Nachrichten (Replay) & $\times$ & $\surd$ & $\surd$ \textbackslash ~? \\
+		Manipulation einer Nachricht (Tagging) & $\times$ & $\surd$ & $\surd$ \textbackslash ~? \\
+	\end{tabular}
+
+	~\\[1ex]
+
+	\begin{tabular}{c}
+		\textbf{Passive Attacken}
+	\end{tabular}
+	
+	\begin{tabular}{m{7.5cm} || c | c | c}
+		\hline
+		\textbf{Angriffsart} & \textbf{Cypherpunk} & \textbf{Mixmaster} & \textbf{Mixminion} \\
+		\hline
+		Traffic Analyse & $\times$ & $\surd$ & $\surd$ \textbackslash ~? \\
+	\end{tabular}
+
+	\caption{Mögliche Angriffe auf Typ-I bis Typ-III Remailer mit Resistenzangabe}
+\end{table}
+
+Man sieht, dass das Cypherpunk-Remailer Protokoll Schwächen gegen diverse Angriffe aufweist. Das Mixmaster- und das Mixminion-Protokoll gelten beide als theoretisch sicher. Das Mixminion-Protokoll ist dem Mixmaster-Protokoll, da es sich um eine Weiterentwicklung handelt, theoretisch sicherheitstechnisch überlegen. Es wendet aktuellere sicherheitsrelevante Forschungsergebnisse an, wie die Verwendung von verschlüsselten und verifizierten Verbindungen, wodurch das Abfangen von Paketen durch Dritte verhindert werden soll. Da die praktische Implementierung des Mixminion-Protokolls jedoch seit 2007 stagniert, und der jetzige Stand einer frühen Betaphase entspricht, ist das Mixminion-Protokoll in der Praxis nicht verwendbar. Der jetzige Stand der Implementierung beinhaltet noch zahlreiche Programmierfehler und sicherheitsgefährende Speicherung von Debug-Logs. Eine sichere Anonymisierung gemäß des Designs kann nicht gewährleistet werden. Daher ist aktuell das Mixmaster-Remailer Protokoll das meistverwendete Verfahren. 
+
+Ein weitere Betrachtungspunkt ist die Zuverlässigkeit eines Remailers. Wenn Alice eine Nachricht an Bob schickt, muss für Alice sichergestellt sein, dass der Empfänger Bob die Nachricht auch tatsächlich erhält. Bei allen drei Remailertypen handelt es sich um Protokolle, denen ein Verbund von Remailern zur anonymisierten Versendung einer Nachricht zugrunde liegt. In jedem Fall ist es essentiell und gegeben, dass einem Knoten zu keiner Zeit der gesamte Pfad der Nachricht bekannt ist. Ein Knoten kennt nur den unmittelbaren Vorgänger und Nachfolger des Pfads. Aus diesem Grund ist es einem Knoten im Netzwerk nicht dazu in der Lage dem ursprünglichen Absender Alice ein Fehlschlagen der Zustellung mitzuteilen. Aus diesem Grund ist es wichtig, dass die Übertragung der Nachricht durch das Netzwerk fehlerfrei zugesichert werden kann.
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{c}
+		\textbf{Zuverlässigkeitsanalyse}
+	\end{tabular}
+		
+	\begin{tabular}{m{7.5cm} || c | c | c}
+		\hline
+		\textbf{Szenario} & \textbf{Cypherpunk} & \textbf{Mixmaster} & \textbf{Mixminion} \\
+		\hline
+		Ausfall eines Remailers im Pfad & $\times$ & $\times$ & $\surd$ \textbackslash ~? \\
+		Manipulation eines Remailers im Pfad & $\times$ & $\times$ & $\surd$ \textbackslash ~? \\
+	\end{tabular}
+
+	\caption{Zuverlässigkeit des Nachrichtenzustellvorgangs der Typ-I bis Typ-III Remailer}
+\end{table}
+
+Die Tabelle zeigt, dass sowohl im Cypherpunk, als auch im Mixmaster- Protokoll eine Zustellung einer Nachricht zum Zeitpunkt der Erstellung nicht zugesichert werden kann. In beiden Fällen ist der Grund dafür das manuell organisierte Verzeichnis der Remailer. Beim Mixminion-Protokoll wird durch die automatische und dauerhafte Synchronisierung der Remailer mit einem Verzeichnisserver der Ausfall eines Remailerknotens durch das Protokoll selbst festgestellt und verhindert, dass ein Klient diesen Remailer in seinen Pfad aufnimmt. Da das Mixminion Protokoll nie vollständig implementiert wurde, ist diese Zusage rein theoretischer Natur.
