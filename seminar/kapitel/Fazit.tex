@@ -2,7 +2,30 @@
 
 In den vorausgegangenen Kapiteln wurde die Funktionsweise der Protokolle der verschiedenen Remailertypen I - III betrachtet. Die Protokolle wurden insbesondere aus sicherheitstechnischer Sicht analysiert. So wurde für jeden Remailertyp behandelt, ob er gegen gängige Angriffsarten resistent ist, und welche Sicherheitsmechanismen entwickelt wurden, um eine Immunität der verschiedenen Angriffsarten zu gewährleisten.  Da diese drei Remailertypen auf dem Prinzip der Mixnetzwerke basieren, wurden Angriffstypen gewählt, die Mixnetzwerke potentiell gefährden können.
 
-Zu sehen ist, dass die Entwicklung der verschiedenen Remailertypen hauptsächlich fehlergetrieben war. So wurde ein folgendes Protokoll entwickelt, indem die Schwächen des vorherigen Protokolls analysiert wurden und versucht wurde, aufbauend auf das vorhergehende Protkoll diese Fehler zu beheben. So bauen diese drei Remailertypen alle auf einer gemeinsamen Designbasis auf. Im Laufe der Entwicklung der Typen wurde diese Basis durch inkrementelle Erweiterungen stetig verbessert.
+Die verschiedenen Remailer-Protokolle unterscheiden sich im Umfang der Funktionalitäten, die das Protokoll nativ zur Verfügung stellt. Das Typ-I und Typ-II Protokoll beschränkt sich auf die reine Funktionalität eines Remailers. Es spezifiziert, wie eine Nachricht anonymisiert übertragen werden kann. Im Typ-III Protokoll ist zusätzlich die Möglichkeit des Antwortens auf anonymisierte Nachrichten enthalten. Dies war für das Typ-I Protokoll nur über einen zusätzlichen Nym-Server möglich. Des weiteren ist ein Verzeichnis, in dem alle verwendbaren Remailer des entsprechenden Typs inklusive aller zur Benutzung notwendigen Daten aufgelistet sind, nicht Teil des Typ-I und Typ-II Protokolls. Ein Verzeichnis muss manuell gepflegt werden. Das Typ-III Protokoll umfasst auch die automatisierte Pflege eines Verzeichnisses.
+
+\begin{table}[htbp]
+	\centering
+	\begin{tabular}{c}
+		\textbf{Übersicht der Features}
+	\end{tabular}
+		
+	\begin{tabular}{m{7.5cm} || c | c | c}
+		\hline
+		\textbf{Feature} & \textbf{Cypherpunk} & \textbf{Mixmaster} & \textbf{Mixminion} \\
+		\hline
+		Anonymisiertes Versenden von Nachrichten & $\surd$ & $\surd$ & $\surd$ \\
+		Antworten auf anonymisierte Nachrichten & $\times$ & $\times$ & $\surd$ \\
+		Verzeichnis & $\times$ & $\times$ & $\surd$ \\
+	\end{tabular}
+
+	\caption{Fähigkeiten der Remailertypen I-III}
+\end{table}
+
+
+Im Kontext der Ausarbeitung ist herausgearbeitet, dass die Entwicklung der verschiedenen Remailertypen hauptsächlich fehlergetrieben war. So wurde ein folgendes Protokoll entwickelt, indem die Schwächen des vorherigen Protokolls analysiert wurden und versucht wurde, aufbauend auf das vorhergehende Protkoll diese Fehler zu beheben. So bauen diese drei Remailertypen alle auf einer gemeinsamen Designbasis auf. Im Laufe der Entwicklung der Typen wurde diese Basis durch inkrementelle Erweiterungen stetig verbessert.
+
+\clearpage
 
 \begin{table}[htbp]
 	\centering
