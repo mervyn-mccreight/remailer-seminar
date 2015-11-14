@@ -17,19 +17,25 @@
 % Um .eps Files einzubinden 
 \usepackage{epstopdf} 
 
-\AtBeginSection[]
-{
-  \begin{frame}
-    \frametitle{Table of Contents}
-    \tableofcontents[currentsection]
-  \end{frame}
-}
+
 
 \setbeamercovered{transparent}
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{footline}[frame number]
 
 \usetheme{Madrid}
+
+\AtBeginSection[]{
+  \begin{frame}
+  \vfill
+  \centering
+  \begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+    \usebeamerfont{title}\insertsectionhead\par%
+  \end{beamercolorbox}
+  \vfill
+  \end{frame}
+}
+
 
 \title[Seminar]{IT-Sicherheit Seminar}
 \subtitle[Remailer]{Remailer: Typ-I bis Typ-III}
@@ -42,6 +48,11 @@
 \begin{document}
 
 \frame{\titlepage}
+
+\begin{frame}
+	\frametitle{Inhaltsverzeichnis}
+	\tableofcontents
+\end{frame}
 
 \section{Motivation}
 \begin{frame}
