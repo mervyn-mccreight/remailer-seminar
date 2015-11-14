@@ -1,5 +1,5 @@
 \chapter{Typ-I Remailer}
-Anfang der 90er Jahre beschloss eine Interessensgruppe mit dem Namen "Cypherpunk\footnote{der Name entspringt dabei einem Wortspiel aus "Cipher" (engl. für Chiffre) und "Cyberpunk". Er verdeutlicht das Ziel der Gruppe, über Verschlüsselungstechniken Datenschutz in der elektronischen Datenverarbeitung zu erlangen.}", das Prinzip eines Remailers aufzugreifen und zu verbessern. Sie entwickelten das Cypherpunk-Remailer Protokoll, das als Typ-I Remailer klassifiziert wird. Ziel der Entwicklung war es, die Unsicherheiten des Typ-0 Remailers zu beseitigen.
+Anfang der 90er Jahre beschloss eine Interessensgruppe mit dem Namen \glqq Cypherpunk\footnote{der Name entspringt dabei einem Wortspiel aus \glqq Cipher\grqq ~(engl. für Chiffre) und \glqq Cyberpunk\grqq. Er verdeutlicht das Ziel der Gruppe, über Verschlüsselungstechniken Datenschutz in der elektronischen Datenverarbeitung zu erlangen.}\grqq, das Prinzip eines Remailers aufzugreifen und zu verbessern. Sie entwickelten das Cypherpunk-Remailer Protokoll, das als Typ-I Remailer klassifiziert wird. Ziel der Entwicklung war es, die Unsicherheiten des Typ-0 Remailers zu beseitigen.
 Anders als bei dem Typ-0 Remailer, der ein pseudonymisierender Remailer ist, handelt es sich beim Typ-I Remailer um einen anonymisierenden Remailer. Das Ziel einer Anonymisierung ist das Verändern personenbezogener Daten in der Art, dass es unmöglich ist, diese Daten einer Person zuzuordnen.\footnote {vgl. § 3 Abs. 6 BDSG.}
 Die Anonymisierung bezieht sich in diesem Fall auf den Absender. Jede Information über diesen soll versteckt werden, sodass ein Rückschluss unmöglich ist.\footnote{vgl. S. 151 \cite{horster2013datenschutz}.} Folgerichtig bietet ein anonymisierender Remailer deutlich mehr Geheimnisschutz als ein pseudonymisierender Remailer. 
 
@@ -9,23 +9,23 @@ Die technische Umsetzung des Cypherpunk-Remailers wurde von der Idee der Mix Net
 Ein Mix-Netzwerk besteht aus einer beliebig großen Menge an Mixen \(M\). Ein Mix in einem Mix-Netzwerk ist üblicherweise ein Server, der von beliebigen Personen betrieben werden kann. Ein Mix fungiert in einem Mix-Netzwerk als Nachrichtenübermittler. Er versendet empfangene Nachrichten derart modifiziert weiter, dass sie nicht mehr auf angenommene Nachrichten zurückzuführen sind. Durch diese Eigenschaft wird Senderanonymität gewährleistet.\footnote{für vollständige Informationen über Mix-Netzwerke vgl.  \cite{chaum1981}.}
 
 \section{Nachrichtenaustausch}
-Einige Konzepte des Mix-Netzwerkes wurden aufgegriffen um den Typ-I Remailer zu entwickeln. Die wichtigsten Aspekte sind das Verschleiern des Nachrichtenweges durch das Senden über beliebige Knoten eines Netzwerks, sowie die schichtenweise Verschlüsselung einer Nachricht \footnote{vgl. S. 84 \cite{sambleben2013informationstechnologie}.}. Zur Verschlüsselung der Nachrichten wird das PGP-Verfahren verwendet. Es handelt sich hierbei um ein asymmetrisches Verschlüsselungsverfahren, sodass ein Schlüsselpaar bestehend aus privatem und öffentlichem Schlüssel benötigt wird.
-Nachrichten, die über das Typ-I Remailer Protokoll versendet werden sollen, durchlaufen dementsprechend mehrere Remailer. Möchte Alice eine Nachricht \(N\) an Bob übermitteln, sucht sie sich aus einer gegebenen Menge von Cypherpunk-Remailern eine endliche Teilmenge \(C = (C_1, C_2, ..., C_n)\) an Remailern aus, über die die Nachricht Schritt für Schritt an Bob übertragen wird. Jeder Remailer verfügt für die PGP-Verschlüsselung über je einen öffentlichen Schlüssel \(E_C\) und einen privaten Schlüssel \(D_C\). Im Folgenden wird eine Nachricht \(N\), die mit einem öffentlichen Schlüssel \(E_x\) verschlüsselt wurde, als \(E_x(N)\) bezeichnet. Für die selektierte Teilmenge an Remailern definiert Alice eine Routingreihenfolge \(A = (A_1, A_2, ..., A_n, A_{Bob})\). Der letzte Eintrag \(A_{Bob}\) ist notwendig, da der letzte Remailer in der Kette die Nachricht letztendlich an Bob übermitteln muss.
-Alice verschlüsselt nun ihre Nachricht zusammen mit den entsprechenden Routing-Informationen nacheinander mit den öffentlichen Schlüsseln \(E_{C_x}\) der selektierten Remailer, in rückwärtiger Reihenfolge der Routingordnung, beginnend mit dem letzten Remailer \(C_n\) (schichtenweise Verschlüsselung):
+Einige Konzepte des Mix-Netzwerkes wurden aufgegriffen, um den Typ-I Remailer zu entwickeln. Die wichtigsten Aspekte sind das Verschleiern des Nachrichtenweges durch das Senden über beliebige Knoten eines Netzwerks, sowie die schichtenweise Verschlüsselung einer Nachricht.\footnote{vgl. S. 84 \cite{sambleben2013informationstechnologie}.} Zur Verschlüsselung der Nachrichten wird das PGP-Verfahren verwendet. Es handelt sich hierbei um ein asymmetrisches Verschlüsselungsverfahren, sodass ein Schlüsselpaar bestehend aus einem privaten und einem öffentlichen Schlüssel benötigt wird.
+Nachrichten, die über das Typ-I Remailer Protokoll versendet werden, durchlaufen dementsprechend mehrere Remailer. Möchte Alice eine Nachricht \(N\) an Bob übermitteln, sucht sie sich aus einer gegebenen Menge von Cypherpunk-Remailern eine endliche Teilmenge \(C = (C_1, C_2, ..., C_n)\) an Remailern aus, über die die Nachricht Schritt für Schritt an Bob übertragen wird. Jeder Remailer verfügt für die PGP-Verschlüsselung über je einen öffentlichen Schlüssel \(E_C\) und einen privaten Schlüssel \(D_C\). Im Folgenden wird eine Nachricht \(N\), die mit einem öffentlichen Schlüssel \(E_x\) verschlüsselt wurde, als \(E_x(N)\) bezeichnet. Für die selektierte Teilmenge an Remailern definiert Alice eine Routingreihenfolge \(A = (A_1, A_2, ..., A_n, A_{Bob})\). Der letzte Eintrag \(A_{Bob}\) ist notwendig, da der letzte Remailer in der Kette die Nachricht an Bob übermitteln muss.
+Alice verschlüsselt ihre Nachricht zusammen mit den entsprechenden Routing-Informationen nacheinander mit den öffentlichen Schlüsseln \(E_{C_x}\) der selektierten Remailer, in rückwärtiger Reihenfolge der Routingordnung, beginnend mit dem letzten Remailer \(C_n\). Dieses Verfahren wird als \glqq schichtenweise Verschlüsselung\grqq ~bezeichnet.
 
 \begin{equation}
-N' = (A_1, E_{C_1}(A_2, E_{C_2} (... (A_n,  E_{C_n}(A_{Bob}, E_{Bob}(N)))
+N' = (A_1, E_{C_1}(A_2, E_{C_2} (... (A_n,  E_{C_n}(A_{Bob}, E_{Bob}(N))))))
 \end{equation}
 
-Anschließend initialisiert sie das Versenden der Nachricht, indem sie \(N'\) an \(C_1\) schickt.
+Anschließend initialisiert sie das Versenden der Nachricht, indem sie \(E_{C_1}(\dots)\) an \(A_1\) schickt.
 
-Eine Nachricht, die einen Typ-I Remailer erreicht, enthält so, nach Entschlüsselung mit Hilfe des eigenen privaten Schlüssels \(D_C\), folgende Informationen:
+Eine Nachricht, die einen Typ-I Remailer erreicht, enthält, nach Entschlüsselung mithilfe des eigenen privaten Schlüssels \(D_C\), folgende Informationen:
 \begin{itemize}
 \item eine Adresse \(A_i\)
 \item eine (verschlüsselte) Nachricht \(E_j(...)\)
 \end{itemize}
 
-Der Adressinformation \(A_i\) entnimmt der Remailer, an wen die Nachricht \(E_j(...)\) weitergeleitet werden soll. Vor dem Weiterleiten der Nachricht modifiziert der Remailer den Header der Nachricht in der Art, dass unkenntlich gemacht wird von wem er diese Nachricht empfangen hat. Essentiell ist, dass ein Remailer durch die Adressinformation \(A\) nur den die Adresse des direkten Nachfolgers erhält. Außer Alice ist niemandem der vollständige Pfad des Nachrichtenverlaufs durch das Remailer-Netzwerk bekannt.
+Der Adressinformation \(A_i\) entnimmt der Remailer, an wen die Nachricht \(E_j(...)\) weitergeleitet werden soll. Vor dem Weiterleiten der Nachricht entfernt der Remailer alle Informationen, die auf den Sender der Nachricht schließen lassen. Essentiell ist, dass ein Remailer durch die Adressinformation \(A\) nur die Adresse des direkten Nachfolgers erhält. Außer Alice ist niemandem der vollständige Pfad des Nachrichtenverlaufs durch das Remailer-Netzwerk bekannt.
 
 \begin{figure}
 	\centering
@@ -43,7 +43,7 @@ Der Adressinformation \(A_i\) entnimmt der Remailer, an wen die Nachricht \(E_j(
 	\caption{Schichtenweise Entschlüsselung der Nachricht am Beispiel mit zwei Remailern}
 \end{figure}
 
-Auf diese Weise wird verhindert, dass der Betreiber eines solchen Remailers in der Lage ist die Anonymisierung des Absenders zu kompromittieren. Dieses Verfahren wird fortgeführt, bis die Nachricht über den letzten Remailer \(C_n\) der Routingordnung den eigentlichen Empfänger Bob erreicht\footnote{vgl. S. 72-77 \cite{kubieziel2007anonym}}.
+Auf diese Weise wird erreicht, dass selbst der Betreiber eines Remailers die Anonymisierung des Absenders nicht aufheben kann. Dieses Verfahren wird fortgeführt, bis die Nachricht über den letzten Remailer \(C_n\) der Routingordnung den eigentlichen Empfänger Bob erreicht.\footnote{vgl. S. 72-77 \cite{kubieziel2007anonym}.}
 
 \begin{figure}
 	\begin{center}
@@ -53,7 +53,7 @@ Auf diese Weise wird verhindert, dass der Betreiber eines solchen Remailers in d
 	\end{center}
 \end{figure}
 
-Als Absender ist Bob nun lediglich die Adresse des Remailers \(C_n\) bekannt. Der ursprüngliche Absender der Nachricht Alice bleibt verborgen. Auf diese Weise ist es Bob in diesem Protokoll allerdings nicht möglich, einem Absender einer Nachricht eine Antwort zu schicken.
+Als Absender ist Bob lediglich die Adresse des Remailers \(C_n\) bekannt. Der ursprüngliche Absender der Nachricht, Alice, bleibt verborgen. Daraus folgt, dass es Bob in diesem Protokoll nicht möglich ist, dem Absender einer Nachricht zu antworten.
 
 \section{Analyse}
 \subsection{Sicherheit}
