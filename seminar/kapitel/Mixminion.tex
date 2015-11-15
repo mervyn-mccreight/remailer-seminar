@@ -99,7 +99,8 @@ Wichtig ist, dass es nicht nur einen Verzeichnisserver pro Netzwerk gibt. Pro Ne
 Möchte Alice eine Nachricht an Bob senden, benötigt sie zunächst alle nötigen Informationen vom Verzeichnisserver. Von diesem erhält sie den Status und die relevanten aktuellen Schlüssel zu jedem Remailer im Netzwerk. Die schichtweise Verschlüsselung der Nachricht erfolgt äquivalent zum Mixmaster Protokoll. Zusätzlich wird der sekundäre Header mit der Prüfsumme des Nachrichtenbodies verschlüsselt.
 Anschließend sendet Alice die Nachricht an den ersten Remailer im Pfad.
 
-Hat ein Remailer eine Nachricht empfangen und sein Puffer ist soweit gefüllt, dass er die Nachricht versenden möchte, wird zunächst die Integrität der Daten über die im Subheader angegebene Prüfsumme überprüft. Anschließend baut er mit Hilfe des ebenfalls im Subheader angegebenen Master-Secrets eine TLS-Verbindung zum nächsten Remailer im Pfad auf. Nachdem der Remailer die Nachricht entsprechend der schichtenweisen Verschlüsselung entschlüsselt hat überprüft er über die im Header angegebene Idenfitikation, ob die selbe Nachricht bereits behandelt wurde. Ist die Überprüfung erfolgreich überträgt er die Nachricht, ansonsten wird die Nachricht verworfen. Danach wird die gesicherte Verbindung wieder aufgelöst.
+Hat ein Remailer eine Nachricht empfangen und ist sein Puffer soweit gefüllt, dass er die Nachricht versenden möchte, wird sie zunächst entsprechend der schichtweisen Verschlüsselung entschlüsselt. 
+Anschließend verifiziert der Remailer die Integrität der Daten über die im Subheader angegebene Prüfsumme und prüft über die im Header angegebene Idenfitikation, ob es sich um ein Duplikat handelt. Ist es kein Duplikat, baut er mit Hilfe des im Subheader angegebenen Master-Secrets eine TLS-Verbindung zum nächsten Remailer auf und überträgt die Nachricht. Danach wird die gesicherte Verbindung wieder aufgelöst.
 
 \begin{figure}
 	\centering
@@ -110,13 +111,13 @@ Hat ein Remailer eine Nachricht empfangen und sein Puffer ist soweit gefüllt, d
 
 		\mess{a}{Nachricht}{m1}
 
-		\begin{callself}{m1}{Integritätscheck}{OK}
-		\end{callself}
-
-		\begin{callself}{m1}{ID-Check}{OK}
-		\end{callself}
-
 		\begin{callself}{m1}{Entschlüsselung}{}
+		\end{callself}
+
+		\begin{callself}{m1}{Integritätscheck}{}
+		\end{callself}
+
+		\begin{callself}{m1}{ID-Check}{}
 		\end{callself}
 
 		\mess{m1}{TLS-Handshake}{m2}
