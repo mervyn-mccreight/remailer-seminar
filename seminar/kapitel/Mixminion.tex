@@ -101,6 +101,34 @@ Anschließend sendet Alice die Nachricht an den ersten Remailer im Pfad.
 
 Hat ein Remailer eine Nachricht empfangen und sein Puffer ist soweit gefüllt, dass er die Nachricht versenden möchte, wird zunächst die Integrität der Daten über die im Subheader angegebene Prüfsumme überprüft. Anschließend baut er mit Hilfe des ebenfalls im Subheader angegebenen Master-Secrets eine TLS-Verbindung zum nächsten Remailer im Pfad auf. Nachdem der Remailer die Nachricht entsprechend der schichtenweisen Verschlüsselung entschlüsselt hat überprüft er über die im Header angegebene Idenfitikation, ob die selbe Nachricht bereits behandelt wurde. Ist die Überprüfung erfolgreich überträgt er die Nachricht, ansonsten wird die Nachricht verworfen. Danach wird die gesicherte Verbindung wieder aufgelöst.
 
+\begin{figure}
+	\centering
+	\begin{sequencediagram}
+		\newinst[2]{a}{Alice}
+		\newinst[2]{m1}{Mixmaster 1}
+		\newinst[2]{m2}{Mixmaster 2}
+
+		\mess{a}{Nachricht}{m1}
+
+		\begin{callself}{m1}{Integritätscheck}{OK}
+		\end{callself}
+
+		\begin{callself}{m1}{ID-Check}{OK}
+		\end{callself}
+
+		\begin{callself}{m1}{Entschlüsselung}{}
+		\end{callself}
+
+		\mess{m1}{TLS-Handshake}{m2}
+		\mess{m2}{TLS-Handshake}{m1}
+		\mess{m1}{Nachricht}{m2}
+		\mess{m1}{TLS-Verbindung auflösen}{m2}
+		\mess{m2}{OK}{m1}
+		
+	\end{sequencediagram}
+	\caption{Prozess bis zur Weiterleitung einer Nachricht im Mixminion Protokoll}
+\end{figure}
+
 Zur Überprüfung der Identifikation muss ein Remailer alle IDs der Nachrichten speichern, die er bereits behandelt hat. Dieser Speicher wird zum Zeitpunkt des Schlüsselwechsels geleert, da Nachrichten, die mit dem alten Schlüssel verschlüsselt wurden, zu diesen Zeitpunkt nicht mehr behandelt werden können. So wird einerseits verhindert, dass zu alte Nachrichten das Remailernetzwerk durchlaufen können, andererseits wird die Größe des Puffers auf diese Weise endlich gehalten.
 
 Der Zeitpunkt, an der der gesamte Pfad des primären Headers durchlaufen ist, wird \glqq Crossover\grqq -Punkt genannt. An diesem Punkt wird der sekundäre Header mit Hilfe der Prüfsumme des Nachrichtenbodies entschlüsselt und der primäre mit dem sekundären Header vertauscht.\footnote{dieser Vorgang wird als swap operation bezeichnet. Vgl. S. 4-5 \cite{mixminion}.} Wurde eine Nachricht in der Zwischenzeit manipuliert, ändert sich die Prüfsumme des Nachrichtenbodies und der sekundäre Header ist nicht entschlüsselbar. In diesem Fall wird die Nachricht verworfen.\footnote{vgl. S. 5 \cite{mixminion}.} Dadurch werden Attacken verhindert, die über eine Manipulation der Nachricht erfolgen. Nachdem der sekundäre Header erfolgreich entschlüsselt und entsprechend vertauscht wurde, wird wie im vorherigen Ablauf weiterverfahren, bis Bob die gesamte Nachricht empfängt. 
