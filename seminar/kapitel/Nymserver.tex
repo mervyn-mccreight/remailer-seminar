@@ -17,13 +17,13 @@ Ein Nym Server ist ein Pseudonym-Server, der es seinen Benutzern erlaubt, ein Ps
 	\caption{Senden einer Nachricht über einen Nym-Server (vereinfacht)}
 \end{figure}
 
-Beim Typ-0 Remailer war es bereits möglich, einem Absender einer Nachricht auf diese zu antworten. Grund dafür ist, dass der Typ-0 Remailer ebenfalls pseudonymisierend war. Er ersetzte die Absenderadresse durch ein Pseudonym und besaß eine Zuordnungstabelle zwischen Pseudonymen und tatsächlichen Identitäten. Dadurch war es einem Typ-0 Remailer möglich, Nachrichten, die an ein Pseudonym gesendet wurden, an die tatsächliche Adresse weiterzuleiten. Der große Nachteil dieser Technik ist, dass einem Betreiber eines Typ-0 Remailers eine Zuordnung zwischen verwendeten Pseudonymen und Identität vorliegt. Einerseits stellt diese Zuordnung eine Schwachstelle dar, da ein Angreifer dazu in der Lage ist diese Zuordnung ebenfalls zu erhalten. Andererseits macht sich der Betreiber selbst angreifbar. So kann er beispielsweise durch staatliche Behörden dazu gezwungen werden, die Identität eines Pseudonyms preiszugeben. Per definitionem handelt es sich daher bei Typ-0 Remailern nicht um Nym-Server.\footnote{vgl. \cite{nymdefinition}.}
+Beim Typ-0 Remailer war es bereits möglich, einem Absender einer Nachricht auf diese zu antworten. Grund dafür ist, dass der Typ-0 Remailer ebenfalls pseudonymisierend war. Er ersetzte die Absenderadresse durch ein Pseudonym und besaß eine Zuordnungstabelle zwischen Pseudonymen und tatsächlichen Identitäten. Dadurch war es einem Typ-0 Remailer möglich, Nachrichten, die an ein Pseudonym gesendet wurden, an die tatsächliche Adresse weiterzuleiten. Der große Nachteil dieser Technik ist, dass einem Betreiber eines Typ-0 Remailers eine Zuordnung zwischen verwendeten Pseudonymen und Identität vorliegt. Einerseits stellt diese Zuordnung eine Schwachstelle dar, da ein Angreifer dazu in der Lage ist diese Zuordnung ebenfalls zu erhalten. Andererseits macht sich der Betreiber selbst angreifbar. So kann er beispielsweise durch staatliche Behörden dazu gezwungen werden, die Identität eines Pseudonyms preiszugeben. Per definitionem handelt es sich daher bei Typ-0 Remailern nicht um Nym-Server \cite{nymdefinition}.
 
 \section{Umsetzung mit Hilfe von Typ-I Remailern}
 Das Ziel von Nym-Servern ist, Pseudonymisierung zu gewährleisten. Dabei soll der Betreiber des Nym-Servers keine Kenntnis von den tatsächlichen Identitäten, die hinter den Pseudonymen stehen, haben. Die Grundidee ist, dieses mit Hilfe des Typ-I-Remailer Protokolls zu erreichen.
 
 Im Unterschied zu Typ-0 Remailern, die eine direkte Zuordnung zwischen Pseudonym und Identität speichern, beschränken sich Nym Server auf die Speicherung von Nyms.
-Ein Nym besteht aus folgenden Informationen\footnote{vgl. S. 25 \cite{loesing2009privacy}}:
+Ein Nym besteht aus folgenden Informationen \cite[S. 25]{loesing2009privacy}:
 \begin{itemize}
 \item ein öffentlicher Schlüssel
 \item ein Reply-Block
@@ -32,7 +32,7 @@ Ein Nym besteht aus folgenden Informationen\footnote{vgl. S. 25 \cite{loesing200
 
 Der Reply-Block beinhaltet einen Pfad durch ein Typ-I Remailernetzwerk zum eigentlichen Empfänger, der sich hinter dem Nym verbirgt.
 
-Möchte Bob ein Pseudonym bei einem Nym Server erstellen, muss er zuerst einen Reply-Block erzeugen. Anschließend schickt er diesen Reply-Block zusammen mit einem gewünschtem Pseudonym und einem öffentlichen Schlüssel an den Nym Server. Der Nym Server legt beim Empfang dieser Nachricht ein Nym mit den empfangenen Daten an.\footnote{vgl. S. 25 \cite{loesing2009privacy}.} Wichtig ist, dass Bob die Nachricht anonymisiert an den Nym-Server sendet, damit dem Nym-Server zu keinem Zeitpunkt die wahre Identität von Bob bekannt ist. Nun ist Bob für Alice über das angegebene Pseudonym für Alice erreichbar.
+Möchte Bob ein Pseudonym bei einem Nym Server erstellen, muss er zuerst einen Reply-Block erzeugen. Anschließend schickt er diesen Reply-Block zusammen mit einem gewünschtem Pseudonym und einem öffentlichen Schlüssel an den Nym Server. Der Nym Server legt beim Empfang dieser Nachricht ein Nym mit den empfangenen Daten an \cite[S. 25]{loesing2009privacy}. Wichtig ist, dass Bob die Nachricht anonymisiert an den Nym-Server sendet, damit dem Nym-Server zu keinem Zeitpunkt die wahre Identität von Bob bekannt ist. Nun ist Bob für Alice über das angegebene Pseudonym für Alice erreichbar.
 
 \begin{figure}
 	\centering
@@ -52,7 +52,7 @@ Möchte Bob ein Pseudonym bei einem Nym Server erstellen, muss er zuerst einen R
 
 Zur Vereinfachung des Diagramms befindet sich der erste Remailer von Bobs Reply-Block in der obigen Abbildung im selben Remailernetzwerk, über das Bob seine Nymregistrierungsdaten anonymisiert an den Nym Server überträgt.
 
-Möchte Alice Bob eine Nachricht zukommen lassen, schickt sie die Nachricht an Bobs Pseudonym auf dem entsprechenden Nym-Server. Empfängt der Nym-Server eine Nachricht, die an ein ihm bekanntes Pseudonym gerichtet ist, verschlüsselt er die Nachricht mit dem im Nym angegebenen öffentlichen Schlüssel und reicht sie zusammen mit dem hinterlegten Reply-Block an den ersten Remailer der im Reply-Block angegebenen Kette von Remailern weiter. Für die eigentliche Zustellung der Nachricht sind die im Reply-Block angegebenen Remailer zuständig. Die Nachricht wird entsprechend des Typ-I-Remailer Protokolls an Bob übertragen.\footnote{vgl. S. 26 \cite{loesing2009privacy}.} Erhält Bob die Nachricht, entschlüsselt er sie mit seinem privaten Schlüssel und verfügt nun über die Nachricht. 
+Möchte Alice Bob eine Nachricht zukommen lassen, schickt sie die Nachricht an Bobs Pseudonym auf dem entsprechenden Nym-Server. Empfängt der Nym-Server eine Nachricht, die an ein ihm bekanntes Pseudonym gerichtet ist, verschlüsselt er die Nachricht mit dem im Nym angegebenen öffentlichen Schlüssel und reicht sie zusammen mit dem hinterlegten Reply-Block an den ersten Remailer der im Reply-Block angegebenen Kette von Remailern weiter. Für die eigentliche Zustellung der Nachricht sind die im Reply-Block angegebenen Remailer zuständig. Die Nachricht wird entsprechend des Typ-I-Remailer Protokolls an Bob übertragen \cite[S. 26]{loesing2009privacy}. Erhält Bob die Nachricht, entschlüsselt er sie mit seinem privaten Schlüssel und verfügt nun über die Nachricht. 
 
 \newpage
 
