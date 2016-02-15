@@ -30,7 +30,7 @@ Bob kann pro empfangenen SURB nur eine Nachricht an Alice schicken. Das liegt da
 
 \subsection{Nachrichten}
 \subsubsection{Typisierung}
-Bisher existierte in den Remailer-Protkollen nur eine Art von Nachricht -- eine anonyme Nachricht von Alice an Bob. Für die Hinzunahme von Antwortnachrichten, die gesondert behandelt werden müssen, ist die Einführung einer Typisierung von Nachrichten für das Mixminion-Remailer Protokoll unerlässlich. Hierbei wird zwischen drei Arten von Nachrichten unterschieden:\footnote{vgl. S. 4 \cite{mixminion}.}
+Bisher existierte in den Remailer-Protkollen nur eine Art von Nachricht -- eine anonyme Nachricht von Alice an Bob. Für die Hinzunahme von Antwortnachrichten, die gesondert behandelt werden müssen, ist die Einführung einer Typisierung von Nachrichten für das Mixminion-Remailer Protokoll unerlässlich. Hierbei wird zwischen drei Arten von Nachrichten unterschieden \cite[S. 4]{mixminion}:
 
 \begin{enumerate}
 \item normale Nachrichten
@@ -65,7 +65,7 @@ Signifikant ist, dass der Header sich in zwei Teile aufteilt -- dem primären un
 		\def\svgwidth{0.9 \linewidth}
 		\includegraphics[width = 0.9 \linewidth]{bilder/mixminion_structure.png}
 		\caption{Die Nachrichtenstruktur im Mixminion-Protokoll}
-		\caption*{\hfill Source: S. 4 \cite{mixminion}.}
+		\caption*{\hfill Source: \cite[S. 4]{mixminion}.}
 	\end{center}
 \end{figure}
 
@@ -82,10 +82,10 @@ Sowohl der primäre als auch der sekundäre Header können sich maximal aus 16 d
 
 Bei einer direkten Antwort von Bob ist der SURB im primären Header der, der von Alice zum Antworten übermittelt wurde. Da in diesem alle Informationen enthalten sind, die benötigt werden um die Nachricht bis zu Alice durchzustellen, befinden sich im sekundären Header in diesem Fall keine signifikanten Informationen. Um den gleichartigen Schein zu wahren, wird der sekundäre Header mit Platzhalterdaten gefüllt.
 
-Bei einer anonymen Antwort befindet sich der SURB von Alice im sekundären Header. Im primären Header befindet sich ein von Bob spezifizierter Pfad durch das Netzwerk, der vor dem Pfad des SURBs durchlaufen wird. Dadurch bleibt die Identität von Bob dem Empfänger der Antwort verborgen.\footnote{vgl. S. 4 \cite{mixminion}.}
+Bei einer anonymen Antwort befindet sich der SURB von Alice im sekundären Header. Im primären Header befindet sich ein von Bob spezifizierter Pfad durch das Netzwerk, der vor dem Pfad des SURBs durchlaufen wird. Dadurch bleibt die Identität von Bob dem Empfänger der Antwort verborgen \cite[S. 4]{mixminion}.
 
 \subsection{Verzeichnisserver}
-Eine weitere Neuerung im Mixminion-Protkoll ist die Einführung von Verzeichnisservern. Ein Verzeichnisserver trägt für jeden Mixminion-Remailer im Netzwerk drei unmittelbar relevante Informationen:\footnote{vgl. S. 8 \cite{mixminion}.}
+Eine weitere Neuerung im Mixminion-Protkoll ist die Einführung von Verzeichnisservern. Ein Verzeichnisserver trägt für jeden Mixminion-Remailer im Netzwerk drei unmittelbar relevante Informationen \cite[S. 8]{mixminion}:
 \begin{itemize}
 \item Die Existenz eines Remailers
 \item Den aktuellen Schlüssel des Remailers
@@ -93,7 +93,7 @@ Eine weitere Neuerung im Mixminion-Protkoll ist die Einführung von Verzeichniss
 \end{itemize}
 
 Alle drei Eigenschaften werden den Verzeichnisservern von den Remailern selbst mitgeteilt.
-Wichtig ist, dass es nicht nur einen Verzeichnisserver pro Netzwerk gibt. Pro Netzwerk gibt es mehrere Verzeichnisserver. Diese verschiedenen Verzeichnisserver müssen dauerhaft synchronisiert sein, damit sichergestellt ist, dass sie die gleichen Daten bezüglich des Remailernetzwerks verteilen (Redundanz). Dadurch wird auch verhindert, dass nicht funktionstüchtige Remailer weiter von einem Benutzer in deren Nachrichtenpfad eingebaut werden. Dies würde dazu führen, dass eine Nachricht nie ihren Empfänger erreichen würde. Des weiteren haben die Verzeichnisserver die Aufgabe, sich dauerhaft gegenseitig zu verifizieren. Dadurch wird verhindert, dass ein Angreifer einen manipulierten Verzeichnisserver einspielt, um beispielsweise alle Daten nur über bestimmte Remailer laufen zu lassen.\footnote{vgl. S. 9 \cite{mixminion}.} Bei dieser Vorgehensweise wird davon ausgegangen, dass nicht alle Verzeichnisserver manipuliert sind, da ansonsten die gegenseitige Verifikation und Synchronisation hinfällig wäre.
+Wichtig ist, dass es nicht nur einen Verzeichnisserver pro Netzwerk gibt. Pro Netzwerk gibt es mehrere Verzeichnisserver. Diese verschiedenen Verzeichnisserver müssen dauerhaft synchronisiert sein, damit sichergestellt ist, dass sie die gleichen Daten bezüglich des Remailernetzwerks verteilen (Redundanz). Dadurch wird auch verhindert, dass nicht funktionstüchtige Remailer weiter von einem Benutzer in deren Nachrichtenpfad eingebaut werden. Dies würde dazu führen, dass eine Nachricht nie ihren Empfänger erreichen würde. Des weiteren haben die Verzeichnisserver die Aufgabe, sich dauerhaft gegenseitig zu verifizieren. Dadurch wird verhindert, dass ein Angreifer einen manipulierten Verzeichnisserver einspielt, um beispielsweise alle Daten nur über bestimmte Remailer laufen zu lassen \cite[S. 9]{mixminion}. Bei dieser Vorgehensweise wird davon ausgegangen, dass nicht alle Verzeichnisserver manipuliert sind, da ansonsten die gegenseitige Verifikation und Synchronisation hinfällig wäre.
 
 \section{Ablauf}
 Möchte Alice eine Nachricht an Bob senden, benötigt sie zunächst alle nötigen Informationen vom Verzeichnisserver. Von diesem erhält sie den Status und die relevanten aktuellen Schlüssel zu jedem Remailer im Netzwerk. Die schichtweise Verschlüsselung der Nachricht erfolgt äquivalent zum Mixmaster Protokoll. Zusätzlich wird der sekundäre Header mit der Prüfsumme des Nachrichtenbodies verschlüsselt.
@@ -132,10 +132,10 @@ Anschließend verifiziert der Remailer die Integrität der Daten über die im Su
 
 Zur Überprüfung der Identifikation muss ein Remailer alle IDs der Nachrichten speichern, die er bereits behandelt hat. Dieser Speicher wird zum Zeitpunkt des Schlüsselwechsels geleert, da Nachrichten, die mit dem alten Schlüssel verschlüsselt wurden, zu diesen Zeitpunkt nicht mehr behandelt werden können. So wird einerseits verhindert, dass zu alte Nachrichten das Remailernetzwerk durchlaufen können, andererseits wird die Größe des Puffers auf diese Weise endlich gehalten.
 
-Der Zeitpunkt, an der der gesamte Pfad des primären Headers durchlaufen ist, wird \glqq Crossover\grqq -Punkt genannt. An diesem Punkt wird der sekundäre Header mit Hilfe der Prüfsumme des Nachrichtenbodies entschlüsselt und der primäre mit dem sekundären Header vertauscht.\footnote{dieser Vorgang wird als swap operation bezeichnet. Vgl. S. 4-5 \cite{mixminion}.} Wurde eine Nachricht in der Zwischenzeit manipuliert, ändert sich die Prüfsumme des Nachrichtenbodies und der sekundäre Header ist nicht entschlüsselbar. In diesem Fall wird die Nachricht verworfen.\footnote{vgl. S. 5 \cite{mixminion}.} Dadurch werden Attacken verhindert, die über eine Manipulation der Nachricht erfolgen. Nachdem der sekundäre Header erfolgreich entschlüsselt und entsprechend vertauscht wurde, wird wie im vorherigen Ablauf weiterverfahren, bis Bob die gesamte Nachricht empfängt. 
+Der Zeitpunkt, an der der gesamte Pfad des primären Headers durchlaufen ist, wird \glqq Crossover\grqq -Punkt genannt. An diesem Punkt wird der sekundäre Header mit Hilfe der Prüfsumme des Nachrichtenbodies entschlüsselt und der primäre mit dem sekundären Header vertauscht \cite[S. 4f.]{mixminion}.\footnote{dieser Vorgang wird als swap operation bezeichnet}  Wurde eine Nachricht in der Zwischenzeit manipuliert, ändert sich die Prüfsumme des Nachrichtenbodies und der sekundäre Header ist nicht entschlüsselbar. In diesem Fall wird die Nachricht verworfen \cite[S. 5]{mixminion}. Dadurch werden Attacken verhindert, die über eine Manipulation der Nachricht erfolgen. Nachdem der sekundäre Header erfolgreich entschlüsselt und entsprechend vertauscht wurde, wird wie im vorherigen Ablauf weiterverfahren, bis Bob die gesamte Nachricht empfängt. 
 
 \section{Sicherheitsanalyse}
-In der Theorie handelt es sich beim Mixminion-Protokoll um das sicherste der drei Remailer-Protokolle. Beim Entwurf wurden neuste Forschungsergebnisse und durch die älteren Remailer-Protokolle gesammelte Erfahrungen genutzt, um Schutzmechanismen gegen bekannte Angriffe zu realisieren.\footnote{vgl. S. 5ff \cite{mixminion}.} Ebenso wurden viele Mängel der früheren Remailer herausgearbeitet und beseitigt. 
+In der Theorie handelt es sich beim Mixminion-Protokoll um das sicherste der drei Remailer-Protokolle. Beim Entwurf wurden neuste Forschungsergebnisse und durch die älteren Remailer-Protokolle gesammelte Erfahrungen genutzt, um Schutzmechanismen gegen bekannte Angriffe zu realisieren \cite[S. 5ff.]{mixminion}. Ebenso wurden viele Mängel der früheren Remailer herausgearbeitet und beseitigt. 
 
 Das Mixminion Protokoll ist jedoch nie in einem vollständigen Zustand implementiert worden. Es ist nie über die Beta-Phase der Implementierung hinaus gekommen. So existieren unter Umständen noch Fehler in der Implementierung, die die Sicherheit gefährden. Außerdem laufen viele Mixminion-Remailer aufgrund ihrer unfertigen Implementierung noch mit Debug-Einstellungen, sodass Aktivitäten geloggt werden. Dieser Zustand ist zu unsicher, sodass das Protokoll in der Praxis nicht aktiv genutzt wird. Daher konnten bisher keine praktischen Erfahrungen bezüglich der Sicherheit dieses Remailer-Protokolls gesammelt werden.
 
